@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>车位系统 · 管理端</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --purple-900: #1a0b2e;
+    --purple-800: #2d1b4e;
+    --purple-700: #3d2463;
+    --purple-600: #5b3a8e;
+    --purple-500: #7c4dff;
+    --purple-300: #c4a7ff;
+    --purple-200: #e0d4ff;
+    --purple-glow: rgba(124, 77, 255, 0.5);
+    --text-light: #f0eaff;
+    --text-muted: #b8a8d9;
+    --green: #4ade80;
+    --red: #f87171;
+    --orange: #fb923c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: var(--purple-900);
+    color: var(--text-light);
+    min-height: 100vh;
+  }
+  header {
+    padding: 32px 24px 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  header h1 { font-size: 1.3rem; color: var(--purple-300); }
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .user-info { color: var(--text-muted); font-size: 0.85rem; }
+  .user-info strong { color: var(--purple-200); }
+  .badge-role {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+  .badge-master { background: var(--orange); color: #000; }
+  .badge-sub { background: var(--purple-500); color: #fff; }
+  .back-link {
+    color: var(--purple-300);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 8px 18px;
+    border-radius: 50px;
+    border: 1px solid rgba(124, 77, 255, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: transparent;
+    font-family: inherit;
+  }
+  .back-link:hover { background: rgba(124, 77, 255, 0.15); }
+  main { max-width: 1200px; margin: 0 auto; padding: 16px 24px 80px; }
+
+  .login-box {
+    background: linear-gradient(145deg, var(--purple-800), var(--purple-900));
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    border-radius: 20px;
+    padding: 40px 32px;
+    max-width: 400px;
+    margin: 60px auto;
+  }
+  .login-box h2 {
+    color: var(--purple-300);
+    margin-bottom: 8px;
+    font-size: 1.3rem;
+    text-align: center;
+  }
+  .login-box .sub {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .login-box input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    background: rgba(26, 11, 46, 0.6);
+    color: var(--text-light);
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    margin-bottom: 14px;
+  }
+  .login-box input:focus { border-color: var(--purple-500); }
+  .login-box .hint-small {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
+    color: #fff;
+    box-shadow: 0 4px 20px var(--purple-glow);
+  }
+  .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px var(--purple-glow); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-warning {
+    background: linear-gradient(135deg, #fb923c, #ea580c);
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-sm {
+    padding: 5px 12px;
+    font-size: 0.78rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--purple-300);
+    border: 1px solid rgba(124, 77, 255, 0.4);
+  }
+  .btn-ghost:hover { background: rgba(124, 77, 255, 0.15); }
+
+  .card {
+    background: linear-gradient(145deg, var(--purple-800), var(--purple-900));
+    border: 1px solid rgba(124, 77, 255, 0.25);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    color: var(--purple-300);
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card .desc {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 16px;
+    align-items: end;
+    margin-bottom: 16px;
+  }
+  .form-row.single { grid-template-columns: 1fr auto; }
+  .field label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .field input[type="text"],
+  .field input[type="password"],
+  .field input[type="file"],
+  .field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    background: rgba(26, 11, 46, 0.6);
+    color: var(--text-light);
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+    font-family: "Consolas", "Monaco", monospace;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--purple-500); }
+  .field input[type="file"] { padding: 9px 12px; cursor: pointer; }
+  .hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; line-height: 1.6; }
+
+  .admin-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(124, 77, 255, 0.06);
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .admin-item-info { display: flex; flex-direction: column; gap: 4px; }
+  .admin-item-info .username {
+    color: var(--purple-200);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: "Consolas", monospace;
+  }
+  .admin-item-info .time { color: var(--text-muted); font-size: 0.78rem; }
+
+  .event-item {
+    background: rgba(124, 77, 255, 0.06);
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+  }
+  .event-item.active {
+    border-color: var(--green);
+    background: rgba(74, 222, 128, 0.08);
+    box-shadow: 0 0 24px rgba(74, 222, 128, 0.15);
+  }
+  .event-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .event-item-header h3 {
+    color: var(--purple-200);
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .event-item-header .badge-active {
+    font-size: 0.7rem;
+    padding: 2px 10px;
+    border-radius: 50px;
+    background: var(--green);
+    color: #000;
+    font-weight: 700;
+  }
+  .event-item .meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; }
+  .event-item .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .route-item {
+    background: rgba(124, 77, 255, 0.06);
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .route-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .route-item-header h4 {
+    color: var(--purple-200);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .add-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(124, 77, 255, 0.15);
+    padding-bottom: 12px;
+  }
+  .add-tab {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(124, 77, 255, 0.25);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .add-tab.active {
+    background: var(--purple-500);
+    color: #fff;
+    border-color: var(--purple-500);
+  }
+
+  .add-panel { display: none; }
+  .add-panel.active { display: block; }
+
+  .spot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .spot-item {
+    background: rgba(124, 77, 255, 0.08);
+    border: 1px solid rgba(124, 77, 255, 0.25);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+  .spot-item.taken {
+    border-color: var(--red);
+    background: rgba(248, 113, 113, 0.08);
+  }
+  .spot-item img {
+    width: 100%;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 6px;
+  }
+  .spot-item .num { font-size: 1rem; font-weight: 700; color: var(--purple-300); }
+  .spot-item.taken .num { color: var(--red); }
+  .spot-item .team { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+  .spot-item .spot-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .progress {
+    height: 4px;
+    background: rgba(124, 77, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 8px;
+    display: none;
+  }
+  .progress.show { display: block; }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple-500), var(--purple-300));
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 5, 20, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .modal.open { display: flex; }
+  .modal-content {
+    background: linear-gradient(145deg, var(--purple-800), var(--purple-900));
+    border: 1px solid rgba(124, 77, 255, 0.4);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .modal-content h3 { color: var(--purple-300); margin-bottom: 12px; font-size: 1.15rem; }
+  .modal-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+  .preview-box {
+    background: rgba(26, 11, 46, 0.6);
+    border: 1px solid rgba(124, 77, 255, 0.2);
+    border-radius: 10px;
+    padding: 16px;
+    max-height: 360px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+  }
+  .preview-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+  }
+  .preview-stat { color: var(--text-muted); }
+  .preview-stat strong { color: var(--purple-200); }
+  .preview-stat.warn strong { color: var(--orange); }
+  .preview-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+  .preview-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    background: rgba(124, 77, 255, 0.12);
+    color: var(--purple-200);
+    border: 1px solid rgba(124, 77, 255, 0.25);
+  }
+  .preview-item img { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; }
+  .preview-item.dup {
+    background: rgba(251, 146, 60, 0.12);
+    color: var(--orange);
+    border-color: rgba(251, 146, 60, 0.4);
+  }
+  .modal-btns { display: flex; gap: 12px; justify-content: flex-end; }
+
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    box-shadow: 0 8px 32px var(--purple-glow);
+    z-index: 99999;
+    opacity: 0;
+    transition: all 0.4s ease;
+    pointer-events: none;
+    max-width: 90vw;
+    text-align: center;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast.success { background: linear-gradient(135deg, #22c55e, #16a34a); }
+  .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+  .toast.info { background: linear-gradient(135deg, var(--purple-500), var(--purple-600)); }
+
+  @media (max-width: 768px) {
+    .form-row, .form-row.single { grid-template-columns: 1fr; }
+    .spot-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🚛 车位系统 · 管理端</h1>
+  <div class="header-actions">
+    <div class="user-info" id="userInfo" style="display:none;"></div>
+    <button class="back-link" id="logoutBtn" style="display:none;">退出登录</button>
+    <a href="./" class="back-link">← 访客端</a>
+  </div>
+</header>
+
+<main>
+  <!-- 登录 -->
+  <div id="loginSection">
+    <div class="login-box">
+      <h2>管理员登录</h2>
+      <p class="sub">使用英文用户名和密码登录</p>
+      <input type="text" id="loginUsername" placeholder="用户名（英文）" autocomplete="username">
+      <input type="password" id="loginPassword" placeholder="密码" autocomplete="current-password">
+      <button class="btn btn-primary" style="width:100%;" id="loginBtn">登录</button>
+      <p class="hint-small">用户名只能是英文、数字、下划线（3-20 位）</p>
+    </div>
+  </div>
+
+  <!-- 管理区 -->
+  <div id="adminSection" style="display:none;">
+    <!-- 管理员账号管理（仅主管理员可见） -->
+    <div class="card" id="adminManageCard" style="display:none;">
+      <h2>👥 管理员账号</h2>
+      <p class="desc">主管理员可以创建子管理员。用户名必须为英文/数字/下划线</p>
+
+      <div class="form-row">
+        <div class="field">
+          <label>用户名</label>
+          <input type="text" id="newAdminUsername" placeholder="如：poxiao、wanqing" maxlength="20">
+        </div>
+        <div class="field">
+          <label>初始密码</label>
+          <input type="password" id="newAdminPassword" placeholder="至少 6 位">
+        </div>
+        <div>
+          <button class="btn btn-primary" id="createAdminBtn">＋ 创建子管理员</button>
+        </div>
+      </div>
+
+      <div id="adminList" style="margin-top:20px;">
+        <p style="color:var(--text-muted);">加载中...</p>
+      </div>
+    </div>
+
+    <!-- 活动管理 -->
+    <div class="card">
+      <h2>🚛 活动管理</h2>
+      <p class="desc">发布新活动后，访客端只会展示最新活动</p>
+
+      <div class="form-row">
+        <div class="field">
+          <label>活动标题</label>
+          <input type="text" id="eventTitle" placeholder="如：2026年9月联运活动">
+        </div>
+        <div class="field">
+          <label>活动描述（可选）</label>
+          <input type="text" id="eventDesc" placeholder="简短说明">
+        </div>
+        <div>
+          <button class="btn btn-primary" id="publishEventBtn">＋ 发布活动</button>
+        </div>
+      </div>
+
+      <div id="eventList" style="margin-top:20px;">
+        <p style="color:var(--text-muted);">加载中...</p>
+      </div>
+    </div>
+
+    <!-- 路线管理 -->
+    <div id="currentEventSection" style="display:none;">
+      <div class="card">
+        <h2>🛣️ 路线管理</h2>
+        <p class="desc" id="currentEventName">正在编辑：--</p>
+
+        <div class="form-row">
+          <div class="field">
+            <label>路线名称</label>
+            <input type="text" id="routeName" placeholder="如：A线、主路线">
+          </div>
+          <div class="field">
+            <label>路线图（可选）</label>
+            <input type="file" id="routeImage" accept="image/*">
+          </div>
+          <div>
+            <button class="btn btn-primary" id="createRouteBtn">＋ 添加路线</button>
+          </div>
+        </div>
+
+        <div class="progress" id="routeProgress">
+          <div class="progress-bar" id="routeProgressBar"></div>
+        </div>
+
+        <div id="routeList" style="margin-top:20px;">
+          <p style="color:var(--text-muted);">还没有路线</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- 批量导入预览 -->
+<div class="modal" id="batchModal">
+  <div class="modal-content">
+    <h3>📦 批量导入预览</h3>
+    <p class="modal-desc" id="batchModalDesc">请确认以下车位：</p>
+    <div class="preview-box">
+      <div class="preview-stats" id="previewStats"></div>
+      <div class="preview-list" id="previewList"></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" id="batchCancelBtn">取消</button>
+      <button class="btn btn-primary" id="batchConfirmBtn">确认导入</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* =====================================================
+     配置区
+     ===================================================== */
+  const SUPABASE_URL = 'https://wjwhrmtivatvzqgrvjjc.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_CHje6Szxcl27CoDMQ0LUtg_i5e5FiO0';
+
+  /* 用户名 → 假邮箱后缀 */
+  const USERNAME_DOMAIN = 'qq.com';
+
+  /* 用户名格式：英文/数字/下划线，3-20 位 */
+  const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,20}$/;
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let currentUser = null;
+  let currentEditEvent = null;
+  let batchContext = null;
+
+  const $ = id => document.getElementById(id);
+
+  /* =====================================================
+     工具函数
+     ===================================================== */
+  function usernameToEmail(username) {
+    return `${username.trim().toLowerCase()}@${USERNAME_DOMAIN}`;
+  }
+
+  function isValidUsername(username) {
+    return USERNAME_REGEX.test(username);
+  }
+
+  let toastTimer;
+  function showToast(msg, type = '') {
+    const t = $('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.className = 'toast ' + type, 2600);
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
+  }
+
+  function openModal(id) { $(id).classList.add('open'); }
+  function closeModal(id) { $(id).classList.remove('open'); }
+
+  /* =====================================================
+     登录
+     ===================================================== */
+  async function doLogin() {
+    const username = $('loginUsername').value.trim();
+    const password = $('loginPassword').value;
+
+    if (!username) { showToast('请输入用户名', 'error'); return; }
+    if (!isValidUsername(username)) {
+      showToast('用户名只能是英文/数字/下划线，3-20 位', 'error');
+      return;
+    }
+    if (!password) { showToast('请输入密码', 'error'); return; }
+
+    const email = usernameToEmail(username);
+    const btn = $('loginBtn');
+    btn.disabled = true;
+    btn.textContent = '登录中...';
+
+    try {
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+      if (error) throw new Error('用户名或密码错误');
+
+      const { data: adminData, error: adminErr } = await sb
+        .from('admins').select('*').eq('id', data.user.id).maybeSingle();
+
+      if (adminErr) throw new Error('查询权限失败：' + adminErr.message);
+      if (!adminData) {
+        await sb.auth.signOut();
+        throw new Error('该账号不是管理员');
+      }
+
+      currentUser = {
+        id: data.user.id,
+        username: adminData.username,
+        role: adminData.role
+      };
+
+      showToast(`欢迎，${currentUser.username}`, 'success');
+      showAdminSection();
+    } catch (err) {
+      console.error(err);
+      showToast('❌ ' + err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '登录';
+    }
+  }
+
+  async function doLogout() {
+    if (!confirm('确定退出登录？')) return;
+    await sb.auth.signOut();
+    currentUser = null;
+    location.reload();
+  }
+
+  /* =====================================================
+     显示管理区
+     ===================================================== */
+  function showAdminSection() {
+    $('loginSection').style.display = 'none';
+    $('adminSection').style.display = 'block';
+    $('userInfo').style.display = 'block';
+    $('logoutBtn').style.display = 'inline-block';
+
+    const roleLabel = currentUser.role === 'master'
+      ? '<span class="badge-role badge-master">主管理员</span>'
+      : '<span class="badge-role badge-sub">子管理员</span>';
+
+    $('userInfo').innerHTML = `<strong>${escapeHtml(currentUser.username)}</strong>${roleLabel}`;
+
+    if (currentUser.role === 'master') {
+      $('adminManageCard').style.display = 'block';
+      loadAdmins();
+    }
+    loadEvents();
+  }
+
+  /* =====================================================
+     管理员列表
+     ===================================================== */
+  async function loadAdmins() {
+    const { data, error } = await sb
+      .from('admins').select('*').order('created_at', { ascending: true });
+
+    const box = $('adminList');
+    if (error) {
+      box.innerHTML = '<p style="color:var(--red);">加载失败：' + error.message + '</p>';
+      return;
+    }
+    if (!data || !data.length) {
+      box.innerHTML = '<p style="color:var(--text-muted);">暂无管理员</p>';
+      return;
+    }
+
+    box.innerHTML = '';
+    data.forEach(admin => {
+      const time = new Date(admin.created_at).toLocaleString('zh-CN');
+      const roleTag = admin.role === 'master'
+        ? '<span class="badge-role badge-master">主管理员</span>'
+        : '<span class="badge-role badge-sub">子管理员</span>';
+
+      const isSelf = admin.id === currentUser.id;
+      const isMaster = admin.role === 'master';
+
+      const div = document.createElement('div');
+      div.className = 'admin-item';
+      div.innerHTML = `
+        <div class="admin-item-info">
+          <div class="username">${escapeHtml(admin.username)} ${roleTag}</div>
+          <div class="time">创建时间：${time}</div>
+        </div>
+        <div>
+          ${(!isSelf && !isMaster) ? `<button class="btn-sm btn-danger" data-action="delete-admin" data-id="${admin.id}" data-name="${escapeHtml(admin.username)}">删除</button>` : ''}
+          ${isSelf ? '<span style="color:var(--text-muted);font-size:0.8rem;">当前账号</span>' : ''}
+        </div>
+      `;
+      box.appendChild(div);
+    });
+
+    box.querySelectorAll('[data-action="delete-admin"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        deleteAdmin(btn.dataset.id, btn.dataset.name);
+      });
+    });
+  }
+
+  /* =====================================================
+     创建子管理员
+     ===================================================== */
+  async function createAdmin() {
+    if (currentUser.role !== 'master') {
+      showToast('只有主管理员才能创建账号', 'error');
+      return;
+    }
+
+    const username = $('newAdminUsername').value.trim();
+    const password = $('newAdminPassword').value;
+
+    if (!username) { showToast('请输入用户名', 'error'); return; }
+    if (!isValidUsername(username)) {
+      showToast('用户名只能是英文/数字/下划线，3-20 位', 'error');
+      return;
+    }
+    if (!password || password.length < 6) {
+      showToast('密码至少 6 位', 'error');
+      return;
+    }
+
+    // 检查用户名是否已存在
+    const { data: existing } = await sb
+      .from('admins').select('id')
+      .ilike('username', username).maybeSingle();
+
+    if (existing) {
+      showToast('该用户名已被使用', 'error');
+      return;
+    }
+
+    const btn = $('createAdminBtn');
+    btn.disabled = true;
+    btn.textContent = '创建中...';
+
+    try {
+      const email = usernameToEmail(username);
+
+      // 保存当前主管理员 session
+      const { data: { session: masterSession } } = await sb.auth.getSession();
+
+      // 用 signUp 创建新用户
+      const { data, error } = await sb.auth.signUp({ email, password });
+      if (error) throw new Error('创建失败：' + error.message);
+      if (!data.user) throw new Error('创建失败：未返回用户信息');
+
+      // 写入 admins 表
+      const { error: insertErr } = await sb.from('admins').insert({
+        id: data.user.id,
+        username: username.toLowerCase(),
+        role: 'sub'
+      });
+
+      if (insertErr) throw new Error('写入权限表失败：' + insertErr.message);
+
+      // 恢复主管理员 session
+      if (masterSession) {
+        await sb.auth.setSession({
+          access_token: masterSession.access_token,
+          refresh_token: masterSession.refresh_token
+        });
+      }
+
+      showToast(`✅ 子管理员 ${username} 创建成功`, 'success');
+      $('newAdminUsername').value = '';
+      $('newAdminPassword').value = '';
+      loadAdmins();
+    } catch (err) {
+      console.error(err);
+      showToast('❌ ' + err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '＋ 创建子管理员';
+    }
+  }
+
+  /* =====================================================
+     删除子管理员
+     ===================================================== */
+  async function deleteAdmin(id, username) {
+    if (!confirm(`确定删除子管理员「${username}」？\n删除后该账号将无法登录。`)) return;
+
+    const { error } = await sb.from('admins').delete().eq('id', id);
+    if (error) {
+      showToast('删除失败：' + error.message, 'error');
+      return;
+    }
+    showToast(`✅ 已删除 ${username}`, 'success');
+    loadAdmins();
+  }
+
+  /* =====================================================
+     上传图片
+     ===================================================== */
+  async function uploadImage(bucket, file) {
+    const ext = file.name.split('.').pop();
+    const filename = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const { error } = await sb.storage
+      .from(bucket)
+      .upload(filename, file, { cacheControl: '3600', upsert: false });
+    if (error) throw error;
+    const { data: urlData } = sb.storage.from(bucket).getPublicUrl(filename);
+    return urlData.publicUrl;
+  }
+
+  /* =====================================================
+     发布活动
+     ===================================================== */
+  async function publishEvent() {
+    const title = $('eventTitle').value.trim();
+    const desc = $('eventDesc').value.trim();
+    if (!title) { showToast('请填写活动标题', 'error'); $('eventTitle').focus(); return; }
+
+    const btn = $('publishEventBtn');
+    btn.disabled = true;
+    btn.textContent = '发布中...';
+
+    try {
+      const { error: updateErr } = await sb
+        .from('events').update({ is_active: false })
+        .neq('id', '00000000-0000-0000-0000-000000000000');
+      if (updateErr) throw new Error('更新旧活动失败：' + updateErr.message);
+
+      const { error: insertErr } = await sb
+        .from('events').insert({ title, description: desc || null, is_active: true });
+      if (insertErr) throw new Error('创建活动失败：' + insertErr.message);
+
+      showToast('✅ 活动发布成功', 'success');
+      $('eventTitle').value = '';
+      $('eventDesc').value = '';
+      loadEvents();
+    } catch (err) {
+      console.error(err);
+      showToast('❌ ' + err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '＋ 发布活动';
+    }
+  }
+
+  /* =====================================================
+     加载活动列表
+     ===================================================== */
+  async function loadEvents() {
+    const { data, error } = await sb
+      .from('events').select('*').order('created_at', { ascending: false });
+
+    const box = $('eventList');
+    if (error) {
+      box.innerHTML = '<p style="color:var(--red);">加载失败：' + error.message + '</p>';
+      return;
+    }
+    if (!data || !data.length) {
+      box.innerHTML = '<p style="color:var(--text-muted);">还没有活动，请先发布</p>';
+      $('currentEventSection').style.display = 'none';
+      return;
+    }
+
+    box.innerHTML = '';
+    data.forEach(event => {
+      const time = new Date(event.created_at).toLocaleString('zh-CN');
+      const div = document.createElement('div');
+      div.className = 'event-item' + (event.is_active ? ' active' : '');
+      div.innerHTML = `
+        <div class="event-item-header">
+          <h3>
+            ${escapeHtml(event.title)}
+            ${event.is_active ? '<span class="badge-active">当前活动</span>' : ''}
+          </h3>
+          <div class="actions">
+            <button class="btn-sm btn-primary" data-action="edit-event" data-id="${event.id}">管理路线</button>
+            ${!event.is_active ? `<button class="btn-sm btn-ghost" data-action="activate-event" data-id="${event.id}">设为当前</button>` : ''}
+            <button class="btn-sm btn-danger" data-action="delete-event" data-id="${event.id}" data-title="${escapeHtml(event.title)}">删除</button>
+          </div>
+        </div>
+        ${event.description ? `<div class="meta">${escapeHtml(event.description)}</div>` : ''}
+        <div class="meta">发布时间：${time}</div>
+      `;
+      box.appendChild(div);
+    });
+
+    box.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const a = btn.dataset.action;
+        const id = btn.dataset.id;
+        if (a === 'edit-event') editEvent(id);
+        else if (a === 'activate-event') activateEvent(id);
+        else if (a === 'delete-event') deleteEvent(id, btn.dataset.title);
+      });
+    });
+
+    const active = data.find(e => e.is_active);
+    if (active) editEvent(active.id);
+  }
+
+  async function activateEvent(id) {
+    if (!confirm('确定将该活动设为当前展示活动？')) return;
+    try {
+      await sb.from('events').update({ is_active: false }).neq('id', '00000000-0000-0000-0000-000000000000');
+      const { error } = await sb.from('events').update({ is_active: true }).eq('id', id);
+      if (error) throw error;
+      showToast('已设为当前活动', 'success');
+      loadEvents();
+    } catch (err) { showToast('操作失败：' + err.message, 'error'); }
+  }
+
+  async function deleteEvent(id, title) {
+    if (!confirm(`确定删除活动「${title}」？\n该活动下所有路线和车位都会被删除！`)) return;
+    const { error } = await sb.from('events').delete().eq('id', id);
+    if (error) { showToast('删除失败：' + error.message, 'error'); return; }
+    showToast('活动已删除', 'success');
+    if (currentEditEvent && currentEditEvent.id === id) {
+      currentEditEvent = null;
+      $('currentEventSection').style.display = 'none';
+    }
+    loadEvents();
+  }
+
+  async function editEvent(id) {
+    const { data, error } = await sb.from('events').select('*').eq('id', id).single();
+    if (error || !data) return;
+    currentEditEvent = data;
+    $('currentEventSection').style.display = 'block';
+    $('currentEventName').textContent =
+      `正在编辑：${data.title}${data.is_active ? '（当前活动）' : '（历史活动）'}`;
+    loadRoutes(id);
+  }
+
+  /* =====================================================
+     路线
+     ===================================================== */
+  async function createRoute() {
+    if (!currentEditEvent) { showToast('请先选择一个活动', 'error'); return; }
+    const name = $('routeName').value.trim();
+    const file = $('routeImage').files[0];
+    if (!name) { showToast('请填写路线名称', 'error'); return; }
+
+    const progress = $('routeProgress');
+    const bar = $('routeProgressBar');
+    progress.classList.add('show');
+    bar.style.width = '40%';
+
+    try {
+      let mapUrl = null;
+      if (file) {
+        bar.style.width = '70%';
+        mapUrl = await uploadImage('route-maps', file);
+      }
+      const { error } = await sb.from('routes').insert({
+        event_id: currentEditEvent.id,
+        name,
+        map_image_url: mapUrl,
+        sort_order: 0
+      });
+      if (error) throw error;
+
+      bar.style.width = '100%';
+      showToast(`路线「${name}」添加成功`, 'success');
+      $('routeName').value = '';
+      $('routeImage').value = '';
+      loadRoutes(currentEditEvent.id);
+    } catch (err) {
+      showToast('添加失败：' + err.message, 'error');
+    } finally {
+      setTimeout(() => {
+        progress.classList.remove('show');
+        bar.style.width = '0%';
+      }, 600);
+    }
+  }
+
+  async function loadRoutes(eventId) {
+    const box = $('routeList');
+    const { data: routes, error: routeErr } = await sb
+      .from('routes').select('*').eq('event_id', eventId)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
+
+    if (routeErr) { box.innerHTML = '<p style="color:var(--red);">加载失败：' + routeErr.message + '</p>'; return; }
+    if (!routes || !routes.length) {
+      box.innerHTML = '<p style="color:var(--text-muted);">还没有路线，请添加</p>';
+      return;
+    }
+
+    const routeIds = routes.map(r => r.id);
+    const { data: spots } = await sb
+      .from('parking_spots').select('*')
+      .in('route_id', routeIds)
+      .order('spot_number', { ascending: true });
+
+    box.innerHTML = '';
+    routes.forEach(route => {
+      const routeSpots = (spots || []).filter(s => s.route_id === route.id);
+      const takenCount = routeSpots.filter(s => s.is_taken).length;
+
+      const div = document.createElement('div');
+      div.className = 'route-item';
+      div.innerHTML = `
+        <div class="route-item-header">
+          <h4>
+            📍 ${escapeHtml(route.name)}
+            <span style="color:var(--text-muted);font-size:0.8rem;font-weight:400;">
+              （${routeSpots.length} 个车位，${takenCount} 个已占）
+            </span>
+          </h4>
+          <div class="actions">
+            <button class="btn-sm btn-danger" data-action="delete-route" data-id="${route.id}" data-name="${escapeHtml(route.name)}">删除路线</button>
+          </div>
+        </div>
+        ${route.map_image_url ? `<img src="${route.map_image_url}" style="width:100%;max-width:300px;height:auto;border-radius:8px;margin-bottom:12px;">` : ''}
+
+        <div class="add-tabs">
+          <button class="add-tab active" data-tab="single" data-route="${route.id}">单个添加</button>
+          <button class="add-tab" data-tab="batch" data-route="${route.id}">📦 批量导入</button>
+        </div>
+
+        <div class="add-panel active" id="panel-single-${route.id}">
+          <div class="form-row single">
+            <div class="field">
+              <input type="text" id="spotNum-${route.id}" placeholder="车位编号，如 A01">
+            </div>
+            <div>
+              <input type="file" id="spotImg-${route.id}" accept="image/*" style="margin-bottom:8px;">
+              <button class="btn btn-primary" data-action="create-spot" data-route="${route.id}">＋ 添加车位</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="add-panel" id="panel-batch-${route.id}">
+          <div class="field" style="margin-bottom:12px;">
+            <label>批量车位编号</label>
+            <textarea id="batchText-${route.id}"
+              placeholder="支持多种格式：&#10;• 逗号分隔：001, 002, 003&#10;• 空格分隔：001 002 003&#10;• 换行分隔（每行一个）&#10;• 连续范围：001-020&#10;• 混合使用：001-010, A01, A02, B01-B05"></textarea>
+          </div>
+
+          <div class="field" style="margin-bottom:12px;">
+            <label>批量图片（可选，文件名需包含车位编号）</label>
+            <input type="file" id="batchImages-${route.id}" accept="image/*" multiple>
+          </div>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn btn-primary" data-action="batch-preview" data-route="${route.id}">📦 预览并导入</button>
+            <button class="btn btn-ghost" data-action="fill-example" data-route="${route.id}">填入示例</button>
+          </div>
+          <p class="hint">
+            💡 支持格式：001, 002 / 001-020 / A01-A05 / 混合<br>
+            📷 图片命名：001.jpg、A01.png、VIP-001.jpg（文件名含车位编号即可）
+          </p>
+        </div>
+
+        <div class="spot-grid">
+          ${routeSpots.map(spot => `
+            <div class="spot-item ${spot.is_taken ? 'taken' : ''}">
+              ${spot.image_url ? `<img src="${spot.image_url}" alt="${spot.spot_number}">` : ''}
+              <div class="num">${escapeHtml(spot.spot_number)}</div>
+              <div class="team">${spot.is_taken ? escapeHtml(spot.team_name || '') : '可选'}</div>
+              <div class="spot-actions">
+                ${spot.is_taken ? `<button class="btn-sm btn-warning" data-action="force-revert" data-id="${spot.id}" data-num="${escapeHtml(spot.spot_number)}">强制撤回</button>` : ''}
+                <button class="btn-sm btn-danger" data-action="delete-spot" data-id="${spot.id}" data-num="${escapeHtml(spot.spot_number)}">删除</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      box.appendChild(div);
+    });
+
+    box.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const a = btn.dataset.action;
+        const routeId = btn.dataset.route;
+        const id = btn.dataset.id;
+
+        if (a === 'delete-route') deleteRoute(id, btn.dataset.name);
+        else if (a === 'create-spot') createSpot(routeId);
+        else if (a === 'batch-preview') openBatchPreview(routeId);
+        else if (a === 'fill-example') fillBatchExample(routeId);
+        else if (a === 'force-revert') forceRevert(id, btn.dataset.num);
+        else if (a === 'delete-spot') deleteSpot(id, btn.dataset.num);
+      });
+    });
+
+    box.querySelectorAll('[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        const routeId = btn.dataset.route;
+        btn.parentElement.querySelectorAll('.add-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const singlePanel = $(`panel-single-${routeId}`);
+        const batchPanel = $(`panel-batch-${routeId}`);
+        if (tab === 'single') {
+          singlePanel.classList.add('active');
+          batchPanel.classList.remove('active');
+        } else {
+          singlePanel.classList.remove('active');
+          batchPanel.classList.add('active');
+        }
+      });
+    });
+  }
+
+  async function deleteRoute(id, name) {
+    if (!confirm(`确定删除路线「${name}」？\n该路线下所有车位都会被删除！`)) return;
+    const { error } = await sb.from('routes').delete().eq('id', id);
+    if (error) { showToast('删除失败：' + error.message, 'error'); return; }
+    showToast('路线已删除', 'success');
+    loadRoutes(currentEditEvent.id);
+  }
+
+  /* =====================================================
+     车位
+     ===================================================== */
+  async function createSpot(routeId) {
+    const numInput = $(`spotNum-${routeId}`);
+    const imgInput = $(`spotImg-${routeId}`);
+    const number = numInput.value.trim();
+    const file = imgInput.files[0];
+    if (!number) { showToast('请填写车位编号', 'error'); return; }
+
+    try {
+      let imageUrl = null;
+      if (file) imageUrl = await uploadImage('spot-images', file);
+
+      const { error } = await sb.from('parking_spots').insert({
+        route_id: routeId, spot_number: number, image_url: imageUrl, is_taken: false
+      });
+      if (error) {
+        if (error.code === '23505') throw new Error('该路线下车位编号已存在');
+        throw error;
+      }
+
+      showToast(`车位 ${number} 添加成功`, 'success');
+      numInput.value = '';
+      imgInput.value = '';
+      loadRoutes(currentEditEvent.id);
+    } catch (err) {
+      showToast('添加失败：' + err.message, 'error');
+    }
+  }
+
+  async function deleteSpot(id, number) {
+    if (!confirm(`确定删除车位 ${number}？`)) return;
+    const { error } = await sb.from('parking_spots').delete().eq('id', id);
+    if (error) { showToast('删除失败：' + error.message, 'error'); return; }
+    showToast(`车位 ${number} 已删除`, 'success');
+    loadRoutes(currentEditEvent.id);
+  }
+
+  async function forceRevert(id, number) {
+    if (!confirm(`确定强制撤回车位 ${number}？\n占用该车位的车队将失去此车位。`)) return;
+    const { error } = await sb.from('parking_spots')
+      .update({ is_taken: false, team_name: null, contact: null, taken_at: null })
+      .eq('id', id);
+    if (error) { showToast('撤回失败：' + error.message, 'error'); return; }
+    showToast(`车位 ${number} 已强制撤回`, 'success');
+    loadRoutes(currentEditEvent.id);
+  }
+
+  /* =====================================================
+     批量导入
+     ===================================================== */
+  function fillBatchExample(routeId) {
+    const ta = $(`batchText-${routeId}`);
+    ta.value = `001-010\nA01, A02, A03\nB01-B05\nVIP-001`;
+    ta.focus();
+  }
+
+  function parseBatchText(text) {
+    const result = [];
+    const seen = new Set();
+    const tokens = text.split(/[\s,，;；\t]+/).map(t => t.trim()).filter(t => t);
+
+    tokens.forEach(token => {
+      const rangeMatch = token.match(/^(.+?)-(.+)$/);
+      if (rangeMatch) {
+        const start = rangeMatch[1].trim();
+        const end = rangeMatch[2].trim();
+        const sNum = parseInt(start, 10);
+        const eNum = parseInt(end, 10);
+        if (!isNaN(sNum) && !isNaN(eNum) && sNum <= eNum) {
+          const padLen = start.length;
+          for (let i = sNum; i <= eNum; i++) {
+            const num = String(i).padStart(padLen, '0');
+            if (!seen.has(num)) { seen.add(num); result.push(num); }
+          }
+          return;
+        }
+        const pm1 = start.match(/^([A-Za-z\-_]*)(\d+)$/);
+        const pm2 = end.match(/^([A-Za-z\-_]*)(\d+)$/);
+        if (pm1 && pm2 && pm1[1] === pm2[1]) {
+          const prefix = pm1[1];
+          const s = parseInt(pm1[2], 10);
+          const e = parseInt(pm2[2], 10);
+          const padLen = pm1[2].length;
+          if (s <= e) {
+            for (let i = s; i <= e; i++) {
+              const num = prefix + String(i).padStart(padLen, '0');
+              if (!seen.has(num)) { seen.add(num); result.push(num); }
+            }
+            return;
+          }
+        }
+      }
+      if (!seen.has(token)) { seen.add(token); result.push(token); }
+    });
+    return result;
+  }
+
+  function extractSpotNumberFromFilename(filename) {
+    const nameWithoutExt = filename.replace(/\.[^.]+$/, '');
+    const match = nameWithoutExt.match(/^([A-Za-z0-9\-]+)/);
+    if (match) return match[1].trim();
+    return nameWithoutExt.trim();
+  }
+
+  async function openBatchPreview(routeId) {
+    const textarea = $(`batchText-${routeId}`);
+    const imageInput = $(`batchImages-${routeId}`);
+    const raw = textarea.value.trim();
+    const files = Array.from(imageInput.files || []);
+
+    if (!raw && !files.length) { showToast('请输入车位编号或选择图片', 'error'); return; }
+
+    let parsedFromText = [];
+    if (raw) parsedFromText = parseBatchText(raw);
+
+    const imageMap = {};
+    const unmatchedFiles = [];
+    files.forEach(file => {
+      const num = extractSpotNumberFromFilename(file.name);
+      if (num) imageMap[num] = file;
+      else unmatchedFiles.push(file.name);
+    });
+
+    const allNumbers = new Set([...parsedFromText, ...Object.keys(imageMap)]);
+    const parsed = Array.from(allNumbers);
+    if (!parsed.length) { showToast('未能解析出有效车位编号', 'error'); return; }
+
+    const { data: existing, error } = await sb
+      .from('parking_spots').select('spot_number').eq('route_id', routeId);
+    if (error) { showToast('查询失败：' + error.message, 'error'); return; }
+
+    const existingSet = new Set((existing || []).map(s => s.spot_number));
+    const valid = parsed.filter(n => !existingSet.has(n));
+    const duplicates = parsed.filter(n => existingSet.has(n));
+
+    batchContext = { routeId, valid, imageMap };
+
+    $('previewStats').innerHTML = `
+      <div class="preview-stat">共解析：<strong>${parsed.length}</strong> 个</div>
+      <div class="preview-stat">可导入：<strong>${valid.length}</strong> 个</div>
+      <div class="preview-stat warn">已存在跳过：<strong>${duplicates.length}</strong> 个</div>
+      <div class="preview-stat">有图片：<strong>${Object.keys(imageMap).length}</strong> 个</div>
+    `;
+
+    const listBox = $('previewList');
+    listBox.innerHTML = '';
+    parsed.forEach(num => {
+      const file = imageMap[num];
+      const isDup = existingSet.has(num);
+      const div = document.createElement('div');
+      div.className = 'preview-item' + (isDup ? ' dup' : '');
+
+      let imgHtml = '';
+      if (file) {
+        const url = URL.createObjectURL(file);
+        imgHtml = `<img src="${url}" alt="${num}">`;
+      }
+
+      div.innerHTML = `
+        ${imgHtml}
+        <span>${num}</span>
+        ${!file ? '<span style="color:var(--text-muted);font-size:0.7rem;">无图</span>' : ''}
+      `;
+      listBox.appendChild(div);
+    });
+
+    if (unmatchedFiles.length) {
+      const div = document.createElement('div');
+      div.style.cssText = 'grid-column:1/-1;margin-top:12px;padding:10px;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.4);border-radius:8px;color:var(--orange);font-size:0.8rem;';
+      div.innerHTML = `⚠️ 以下文件名未识别到车位编号：<br>${unmatchedFiles.map(escapeHtml).join('、')}`;
+      listBox.appendChild(div);
+    }
+
+    $('batchModalDesc').textContent = valid.length
+      ? `即将导入 ${valid.length} 个车位到该路线。请确认：`
+      : '⚠️ 所有编号都已存在，无需导入。';
+
+    $('batchConfirmBtn').disabled = valid.length === 0;
+    $('batchConfirmBtn').style.opacity = valid.length === 0 ? '0.5' : '1';
+
+    openModal('batchModal');
+  }
+
+  async function confirmBatchImport() {
+    if (!batchContext || !batchContext.valid.length) return;
+
+    const { routeId, valid, imageMap } = batchContext;
+    closeModal('batchModal');
+
+    const total = valid.length;
+    let success = 0, fail = 0;
+
+    showToast(`正在导入 0 / ${total}...`, 'info');
+
+    for (let i = 0; i < total; i++) {
+      const num = valid[i];
+      const file = imageMap[num];
+
+      try {
+        let imageUrl = null;
+        if (file) imageUrl = await uploadImage('spot-images', file);
+
+        const { error } = await sb.from('parking_spots').insert({
+          route_id: routeId,
+          spot_number: num,
+          image_url: imageUrl,
+          is_taken: false
+        });
+
+        if (error) {
+          if (error.code === '23505') console.warn('已存在，跳过：', num);
+          else throw error;
+        } else {
+          success++;
+        }
+      } catch (err) {
+        console.error('导入失败：', num, err);
+        fail++;
+      }
+
+      if ((i + 1) % 5 === 0 || i === total - 1) {
+        showToast(`正在导入 ${i + 1} / ${total}...`, 'info');
+      }
+    }
+
+    if (fail === 0) showToast(`✅ 成功导入 ${success} 个车位`, 'success');
+    else if (success === 0) showToast('❌ 全部导入失败', 'error');
+    else showToast(`部分成功：${success} 成功，${fail} 失败`, 'error');
+
+    batchContext = null;
+    loadRoutes(currentEditEvent.id);
+  }
+
+  /* =====================================================
+     事件绑定
+     ===================================================== */
+  function bindEvents() {
+    $('loginBtn').addEventListener('click', doLogin);
+    $('loginPassword').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+
+    $('logoutBtn').addEventListener('click', doLogout);
+
+    $('createAdminBtn').addEventListener('click', createAdmin);
+
+    $('publishEventBtn').addEventListener('click', publishEvent);
+
+    $('createRouteBtn').addEventListener('click', createRoute);
+
+    $('batchCancelBtn').addEventListener('click', () => closeModal('batchModal'));
+    $('batchConfirmBtn').addEventListener('click', confirmBatchImport);
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal('batchModal');
+    });
+
+    $('batchModal').addEventListener('click', e => {
+      if (e.target.id === 'batchModal') closeModal('batchModal');
+    });
+  }
+
+  /* =====================================================
+     自动登录
+     ===================================================== */
+  async function checkSession() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+
+    const { data: adminData } = await sb
+      .from('admins').select('*').eq('id', session.user.id).maybeSingle();
+
+    if (adminData) {
+      currentUser = {
+        id: session.user.id,
+        username: adminData.username,
+        role: adminData.role
+      };
+      showAdminSection();
+    }
+  }
+
+  /* =====================================================
+     启动
+     ===================================================== */
+  window.addEventListener('load', async () => {
+    bindEvents();
+    await checkSession();
+  });
+</script>
+
+</body>
+</html>
