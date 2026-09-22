@@ -986,7 +986,7 @@
         <tr><td>成立时间</td><td>2026 年 1 月 11 日</td></tr>
         <tr><td>VTC 标签</td><td>CN | GC-Team</td></tr>
         <tr><td>创始人</td><td>GC-CEO-PoXiao</td></tr>
-        <tr><td>成员人数</td><td id="vtcMemberInline">102 人</td></tr>
+        <tr><td>成员人数</td><td id="vtcMemberInline">100 人</td></tr>
         <tr><td>招募状态</td><td>开放中</td></tr>
         <tr><td>支持游戏</td><td>Euro Truck Simulator 2</td></tr>
       </table>
@@ -1160,7 +1160,7 @@
       <div class="vtc-glow"></div>
       <div class="card-icon">🚛</div>
       <h3>TruckersMP VTC</h3>
-      <p class="card-desc">查看车队档案、成员名单与联运记录</p>
+      <p class="card-desc">查看车队档案、成员名单与详细信息</p>
 
       <div class="vtc-stats">
         <div class="stat">
@@ -1168,7 +1168,7 @@
           <span class="stat-label">VTC ID</span>
         </div>
         <div class="stat">
-          <span class="stat-num" id="vtcMemberCount">102</span>
+          <span class="stat-num" id="vtcMemberCount">100</span>
           <span class="stat-label">成员</span>
         </div>
       </div>
@@ -1194,13 +1194,15 @@
 
 <script>
   const TEAM_DATA = {
-    vtcMembers: 102,
+    vtcMembers: 100,
     qqGroupNumber: "825532223",
     vtcId: "86009"
   };
 
-  // 部署后替换为你的 Vercel 域名
-  const API_URL = 'https://gc-api-nine.vercel.app/api/vtc-members';
+  // 官方 API 直连地址
+  // 注意：浏览器直接请求会遇到 CORS 限制，请求失败时自动回退到保底值 100
+  // 后续找到可用的代理接口后，替换此地址即可
+  const API_URL = 'https://api.truckersmp.com/v2/vtc/86009';
 
   function createParticles() {
     const box = document.getElementById('particles');
@@ -1325,25 +1327,40 @@
     if (slideTimer) clearInterval(slideTimer);
   }
 
-  /* ===== 通过后端代理获取 VTC 成员数 ===== */
+  /* =====================================================
+     获取 VTC 成员数
+     - 优先请求官方 API
+     - 失败时使用保底值 100
+     - 后续找到可用代理接口后，只替换 API_URL 即可
+     ===================================================== */
   async function fetchVTCData() {
     try {
       const res = await fetch(API_URL);
 
       if (!res.ok) {
-        throw new Error(`代理接口返回 HTTP ${res.status}`);
+        throw new Error(`API 返回 HTTP ${res.status}`);
       }
 
       const data = await res.json();
 
-      if (data.success && typeof data.memberCount === 'number') {
-        TEAM_DATA.vtcMembers = data.memberCount;
+      // 官方 API 响应结构：{ error: false, response: { members_count: 102, ... } }
+      if (data && data.response && typeof data.response.members_count === 'number') {
+        TEAM_DATA.vtcMembers = data.response.members_count;
         console.log('[VTC] 成员数已更新：', TEAM_DATA.vtcMembers);
-      } else {
-        throw new Error(data.error || '响应格式异常');
+        return;
       }
+
+      // 兼容代理接口可能返回的结构：{ success: true, memberCount: 102 }
+      if (data && data.success && typeof data.memberCount === 'number') {
+        TEAM_DATA.vtcMembers = data.memberCount;
+        console.log('[VTC] 成员数已更新（代理）：', TEAM_DATA.vtcMembers);
+        return;
+      }
+
+      throw new Error('响应格式不符合预期');
     } catch (err) {
-      console.warn('[VTC] 数据获取失败，使用兜底值：', err.message);
+      console.warn('[VTC] 数据获取失败，使用保底值 100：', err.message);
+      TEAM_DATA.vtcMembers = 100;
     }
   }
 
@@ -1415,13 +1432,11 @@
     document.getElementById('contact').classList.add('visible');
     initCarousel();
 
-    // 页面加载后立即请求，不再等待滚动到联系区域
     fillTeamData();
 
-    // 兜底：3 秒后仍未成功则再试一次
+    // 兜底：3 秒后若仍未成功填充真实值，再次尝试
     setTimeout(() => {
-      if (document.getElementById('vtcMemberInline') &&
-          document.getElementById('vtcMemberInline').textContent === '—') {
+      if (TEAM_DATA.vtcMembers === 100) {
         fillTeamData();
       }
     }, 3000);
