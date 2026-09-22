@@ -986,7 +986,7 @@
         <tr><td>成立时间</td><td>2026 年 1 月 11 日</td></tr>
         <tr><td>VTC 标签</td><td>CN | GC-Team</td></tr>
         <tr><td>创始人</td><td>GC-CEO-PoXiao</td></tr>
-        <tr><td>成员人数</td><td id="vtcMemberInline">—</td></tr>
+        <tr><td>成员人数</td><td id="vtcMemberInline">102 人</td></tr>
         <tr><td>招募状态</td><td>开放中</td></tr>
         <tr><td>支持游戏</td><td>Euro Truck Simulator 2</td></tr>
       </table>
@@ -1145,7 +1145,7 @@
 
       <div class="qq-stats">
         <div class="stat">
-          <span class="stat-num" id="qqGroupNum">—</span>
+          <span class="stat-num" id="qqGroupNum">825532223</span>
           <span class="stat-label">群号</span>
         </div>
       </div>
@@ -1164,11 +1164,11 @@
 
       <div class="vtc-stats">
         <div class="stat">
-          <span class="stat-num" id="vtcIdNum">—</span>
+          <span class="stat-num" id="vtcIdNum">86009</span>
           <span class="stat-label">VTC ID</span>
         </div>
         <div class="stat">
-          <span class="stat-num" id="vtcMemberCount">0</span>
+          <span class="stat-num" id="vtcMemberCount">102</span>
           <span class="stat-label">成员</span>
         </div>
       </div>
@@ -1198,6 +1198,9 @@
     qqGroupNumber: "825532223",
     vtcId: "86009"
   };
+
+  // 部署后替换为你的 Vercel 域名
+  const API_URL = 'https://gc-api-nine.vercel.app/api/vtc-members';
 
   function createParticles() {
     const box = document.getElementById('particles');
@@ -1325,8 +1328,7 @@
   /* ===== 通过后端代理获取 VTC 成员数 ===== */
   async function fetchVTCData() {
     try {
-      // 本地测试用相对路径；部署到 GitHub Pages 后改为 Vercel 完整地址
-      const res = await fetch('https://gc-api-nine.vercel.app/api/vtc-members');
+      const res = await fetch(API_URL);
 
       if (!res.ok) {
         throw new Error(`代理接口返回 HTTP ${res.status}`);
@@ -1361,11 +1363,20 @@
   function animateTo(id, target) {
     const el = document.getElementById(id);
     if (!el) return;
-    let current = 0;
-    const step = Math.max(1, Math.ceil(target / 40));
+    let current = parseInt(el.textContent) || 0;
+    if (current === target) return;
+
+    const diff = target - current;
+    const step = Math.max(1, Math.ceil(Math.abs(diff) / 20));
+    const direction = diff > 0 ? 1 : -1;
+
     const timer = setInterval(() => {
-      current += step;
-      if (current >= target) { current = target; clearInterval(timer); }
+      current += step * direction;
+      if ((direction > 0 && current >= target) ||
+          (direction < 0 && current <= target)) {
+        current = target;
+        clearInterval(timer);
+      }
       el.textContent = current;
     }, 30);
   }
@@ -1404,24 +1415,16 @@
     document.getElementById('contact').classList.add('visible');
     initCarousel();
 
-    const contactObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          fillTeamData();
-          contactObserver.disconnect();
-        }
-      });
-    }, { threshold: 0.1 });
+    // 页面加载后立即请求，不再等待滚动到联系区域
+    fillTeamData();
 
-    const contact = document.getElementById('contact');
-    if (contact) contactObserver.observe(contact);
-
+    // 兜底：3 秒后仍未成功则再试一次
     setTimeout(() => {
-      if (document.getElementById('qqGroupNum') &&
-          document.getElementById('qqGroupNum').textContent === '—') {
+      if (document.getElementById('vtcMemberInline') &&
+          document.getElementById('vtcMemberInline').textContent === '—') {
         fillTeamData();
       }
-    }, 1500);
+    }, 3000);
   });
 
   document.addEventListener('keydown', (e) => {
