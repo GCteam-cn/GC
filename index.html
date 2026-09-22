@@ -1326,7 +1326,7 @@
   async function fetchVTCData() {
     try {
       // 本地测试用相对路径；部署到 GitHub Pages 后改为 Vercel 完整地址
-      const res = await fetch('/api/vtc-members');
+      const res = await fetch('https://gc-api-nine.vercel.app/api/vtc-members');
 
       if (!res.ok) {
         throw new Error(`代理接口返回 HTTP ${res.status}`);
