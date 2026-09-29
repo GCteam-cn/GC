@@ -340,17 +340,6 @@
     border: none;
   }
 
-  .btn-primary {
-    background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
-    color: #fff;
-    box-shadow: 0 4px 20px var(--purple-glow);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px var(--purple-glow);
-  }
-
   .btn-outline {
     background: transparent;
     color: var(--purple-300);
@@ -701,7 +690,7 @@
 
   .contact-hero {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
   }
 
@@ -727,14 +716,15 @@
     transform: translateY(-8px) scale(1.02);
   }
 
-  .contact-big-card > *:not(.qq-glow):not(.vtc-glow):not(.yy-glow) {
+  .contact-big-card > *:not(.qq-glow):not(.vtc-glow):not(.yy-glow):not(.discord-glow) {
     position: relative;
     z-index: 2;
   }
 
   .qq-glow,
   .vtc-glow,
-  .yy-glow {
+  .yy-glow,
+  .discord-glow {
     position: absolute;
     top: -50%; left: -50%;
     width: 200%; height: 200%;
@@ -753,7 +743,8 @@
 
   .contact-big-card:hover .qq-glow,
   .contact-big-card:hover .vtc-glow,
-  .contact-big-card:hover .yy-glow { opacity: 0.6; }
+  .contact-big-card:hover .yy-glow,
+  .contact-big-card:hover .discord-glow { opacity: 0.6; }
 
   .card-icon {
     font-size: 3rem;
@@ -802,7 +793,8 @@
 
   .qq-stats,
   .vtc-stats,
-  .yy-stats {
+  .yy-stats,
+  .discord-stats {
     display: flex;
     justify-content: center;
     gap: 30px;
@@ -1125,9 +1117,6 @@
     .contact-hero {
       grid-template-columns: 1fr 1fr;
     }
-    .contact-big-card:last-child {
-      grid-column: span 2;
-    }
   }
 
   @media (max-width: 768px) {
@@ -1158,10 +1147,10 @@
     .section-title { font-size: 1.4rem; }
 
     .contact-hero { grid-template-columns: 1fr; }
-    .contact-big-card:last-child { grid-column: span 1; }
     .qq-stats,
     .vtc-stats,
-    .yy-stats { gap: 28px; }
+    .yy-stats,
+    .discord-stats { gap: 28px; }
     .contact-big-card { padding: 32px 24px; }
     .card-icon { font-size: 2.6rem; }
 
@@ -1216,7 +1205,7 @@
   <p class="slogan" data-i18n="hero_slogan">行则不散，进则不乱，同向而行，共速而驰</p>
   <p class="slogan-en" data-i18n="hero_slogan_en">March united, advance orderly, move side-by-side, race in unison</p>
   <div class="hero-btns">
-    <a href="https://truckersmp.com/vtc/86009" target="_blank" rel="noopener" class="btn btn-primary" data-i18n="hero_btn_vtc">
+    <a href="https://truckersmp.com/vtc/86009" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="hero_btn_vtc">
       访问 VTC 主页
     </a>
     <a href="https://qm.qq.com/q/s5Fyq72Jos" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="hero_btn_qq">
@@ -1224,6 +1213,9 @@
     </a>
     <a href="https://z.yy.com/mVKSCtyGZX40" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="hero_btn_yy">
       进入 YY 频道
+    </a>
+    <a href="https://discord.gg/Euwydh8WM" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="hero_btn_discord">
+      加入 Discord
     </a>
   </div>
 </section>
@@ -1278,7 +1270,7 @@
       <div class="card rule-item"><h4 data-i18n="join_device_t">设备要求</h4><p data-i18n="join_device_d">拥有基础语音设备，能够正常使用 YY 频道 819095 进行语音沟通与活动配合。</p></div>
       <div class="card rule-item"><h4 data-i18n="join_attitude_t">态度要求</h4><p data-i18n="join_attitude_d">具备团队意识，服从管理，保持稳定、积极、认真的参与态度。</p></div>
       <div class="card rule-item"><h4 data-i18n="join_image_t">形象要求</h4><p data-i18n="join_image_d">愿意维护车队整体对外形象，遵守车队规范，不做影响团队声誉之行为。</p></div>
-      <div class="card rule-item"><h4 data-i18n="join_way_t">加入方式</h4><p data-i18n="join_way_d">通过车队接待群 825532223 / YY 频道 819095 提交申请，经审核通过后加入车队。</p></div>
+      <div class="card rule-item"><h4 data-i18n="join_way_t">加入方式</h4><p data-i18n="join_way_d">通过车队接待群 825532223 / YY 频道 819095 / Discord 社区提交申请，经审核通过后加入车队。</p></div>
     </div>
   </div>
 </section>
@@ -1416,6 +1408,25 @@
       </div>
     </a>
 
+    <a href="https://discord.gg/Euwydh8WM" target="_blank" rel="noopener" class="contact-big-card discord-card">
+      <div class="discord-glow"></div>
+      <div class="card-icon">🎮</div>
+      <h3 data-i18n="contact_discord_title">Discord 官方社区</h3>
+      <p class="card-desc" data-i18n="contact_discord_desc">加入我们的 Discord 服务器 · 实时交流与活动通知</p>
+
+      <div class="discord-stats">
+        <div class="stat">
+          <span class="stat-num" style="font-size:1rem;">China GC Team</span>
+          <span class="stat-label" data-i18n="contact_discord_label">社区名称</span>
+        </div>
+      </div>
+
+      <div class="card-btn">
+        <span data-i18n="contact_discord_btn">加入 Discord</span>
+        <span class="card-btn-arrow">→</span>
+      </div>
+    </a>
+
     <a href="https://z.yy.com/mVKSCtyGZX40" target="_blank" rel="noopener" class="contact-big-card yy-card">
       <div class="yy-glow"></div>
       <div class="card-icon">🎙️</div>
@@ -1500,6 +1511,7 @@
       hero_btn_vtc: '访问 VTC 主页',
       hero_btn_qq: '加入 QQ 接待群',
       hero_btn_yy: '进入 YY 频道',
+      hero_btn_discord: '加入 Discord',
       intro_title: '车队介绍',
       intro_sub: 'ABOUT TEAM',
       intro_highlight: '中国共驰车队 / China GongChi Team',
@@ -1534,7 +1546,7 @@
       join_device_t: '设备要求', join_device_d: '拥有基础语音设备，能够正常使用 YY 频道 819095 进行语音沟通与活动配合。',
       join_attitude_t: '态度要求', join_attitude_d: '具备团队意识，服从管理，保持稳定、积极、认真的参与态度。',
       join_image_t: '形象要求', join_image_d: '愿意维护车队整体对外形象，遵守车队规范，不做影响团队声誉之行为。',
-      join_way_t: '加入方式', join_way_d: '通过车队接待群 825532223 / YY 频道 819095 提交申请，经审核通过后加入车队。',
+      join_way_t: '加入方式', join_way_d: '通过车队接待群 825532223 / YY 频道 819095 / Discord 社区提交申请，经审核通过后加入车队。',
       gallery_title: '车队画展',
       gallery_sub: 'TEAM GALLERY',
       gallery_item1: '车队活动 1', gallery_item2: '车队活动 2', gallery_item3: '车队活动 3',
@@ -1557,6 +1569,10 @@
       contact_qq_desc: '欧洲卡车模拟2【中国共驰车队】TMP 官方接待群',
       contact_qq_label: '群号',
       contact_qq_btn: '一键加入 QQ 群',
+      contact_discord_title: 'Discord 官方社区',
+      contact_discord_desc: '加入我们的 Discord 服务器 · 实时交流与活动通知',
+      contact_discord_label: '社区名称',
+      contact_discord_btn: '加入 Discord',
       contact_yy_title: 'YY 语音频道',
       contact_yy_desc: '活动期间语音沟通 · 联运调度指挥',
       contact_yy_label: '频道号',
@@ -1587,6 +1603,7 @@
       hero_btn_vtc: 'Visit VTC Page',
       hero_btn_qq: 'Join QQ Group',
       hero_btn_yy: 'Join YY Channel',
+      hero_btn_discord: 'Join Discord',
       intro_title: 'About Team',
       intro_sub: 'ABOUT TEAM',
       intro_highlight: 'China GongChi Team',
@@ -1621,7 +1638,7 @@
       join_device_t: 'Equipment Requirements', join_device_d: 'Have basic voice equipment and be able to use YY channel 819095 for voice communication and coordination.',
       join_attitude_t: 'Attitude Requirements', join_attitude_d: 'Have team spirit, obey management, and maintain a stable, positive, and serious attitude.',
       join_image_t: 'Image Requirements', join_image_d: 'Willing to maintain the team\'s public image, comply with team rules, and avoid any behavior that damages the team\'s reputation.',
-      join_way_t: 'How to Join', join_way_d: 'Submit an application via the recruitment group 825532223 / YY channel 819095. Join after approval.',
+      join_way_t: 'How to Join', join_way_d: 'Submit an application via the recruitment group 825532223 / YY channel 819095 / Discord community. Join after approval.',
       gallery_title: 'Team Gallery',
       gallery_sub: 'TEAM GALLERY',
       gallery_item1: 'Team Activity 1', gallery_item2: 'Team Activity 2', gallery_item3: 'Team Activity 3',
@@ -1644,6 +1661,10 @@
       contact_qq_desc: 'ETS2 [China GongChi Team] Official TMP Reception Group',
       contact_qq_label: 'Group No.',
       contact_qq_btn: 'Join QQ Group',
+      contact_discord_title: 'Discord Official Community',
+      contact_discord_desc: 'Join our Discord server · Real-time chat and event notifications',
+      contact_discord_label: 'Community Name',
+      contact_discord_btn: 'Join Discord',
       contact_yy_title: 'YY Voice Channel',
       contact_yy_desc: 'Voice communication during activities · Convoy dispatch',
       contact_yy_label: 'Channel No.',
@@ -1701,7 +1722,8 @@
     vtcMembers: 100,
     qqGroupNumber: "825532223",
     vtcId: "86009",
-    yyChannel: "819095"
+    yyChannel: "819095",
+    discordInvite: "https://discord.gg/Euwydh8WM"
   };
 
   const API_URL = 'https://api.truckersmp.com/v2/vtc/86009';
@@ -1801,7 +1823,7 @@
           <h3>4. 知识产权</h3>
           <p>本网站使用的 Logo、文字、图片（除特别注明外）等知识产权归 China GC Team 或相应权利人所有。未经书面许可，不得擅自复制、传播或用于商业用途。</p>
           <h3>5. 第三方链接</h3>
-          <p>本网站可能包含指向第三方平台（如 QQ、TruckersMP、YY）的链接。我们不对第三方网站的内容、隐私实践或服务条款负责，请您自行查阅相关条款。</p>
+          <p>本网站可能包含指向第三方平台（如 QQ、TruckersMP、YY、Discord）的链接。我们不对第三方网站的内容、隐私实践或服务条款负责，请您自行查阅相关条款。</p>
           <h3>6. 免责声明</h3>
           <p>本网站及车队服务按"现状"提供。我们尽力确保信息准确，但不对因使用本网站导致的任何直接或间接损失承担责任。车队活动参与存在固有风险，请成员自行评估。</p>
           <h3>7. 条款变更</h3>
@@ -1824,7 +1846,7 @@
           <h3>4. Intellectual Property</h3>
           <p>Intellectual property such as the logo, text, and images (unless otherwise noted) used on this website belongs to China GC Team or respective rights holders. Unauthorized reproduction, distribution, or commercial use is prohibited.</p>
           <h3>5. Third-Party Links</h3>
-          <p>This website may contain links to third-party platforms (e.g., QQ, TruckersMP, YY). We are not responsible for the content, privacy practices, or terms of service of third-party websites. Please review their terms yourself.</p>
+          <p>This website may contain links to third-party platforms (e.g., QQ, TruckersMP, YY, Discord). We are not responsible for the content, privacy practices, or terms of service of third-party websites. Please review their terms yourself.</p>
           <h3>6. Disclaimer</h3>
           <p>This website and team services are provided "as is." While we strive for accuracy, we are not liable for any direct or indirect losses resulting from the use of this website. Participation in team activities carries inherent risks; members should assess them independently.</p>
           <h3>7. Changes to Terms</h3>
@@ -1844,7 +1866,7 @@
           <p>我们仅在您主动提供时收集个人信息，例如：</p>
           <ul>
             <li>加入车队时提交的 QQ 号、游戏昵称、TruckersMP ID。</li>
-            <li>通过 QQ 群或 YY 语音沟通时产生的必要联系信息。</li>
+            <li>通过 QQ 群、YY 语音或 Discord 沟通时产生的必要联系信息。</li>
             <li>您通过网站表单或邮件主动发送的信息。</li>
           </ul>
           <p>本网站不主动使用 Cookies 或类似跟踪技术收集个人身份信息，仅使用必要的本地存储实现基础功能。</p>
@@ -1884,7 +1906,7 @@
           <p>We collect personal information only when you voluntarily provide it, such as:</p>
           <ul>
             <li>QQ number, game nickname, and TruckersMP ID submitted when joining the team.</li>
-            <li>Necessary contact information generated through QQ groups or YY voice communication.</li>
+            <li>Necessary contact information generated through QQ groups, YY voice, or Discord communication.</li>
             <li>Information you voluntarily send via website forms or email.</li>
           </ul>
           <p>This website does not actively use cookies or similar tracking technologies to collect personally identifiable information. Only necessary local storage is used for basic functionality.</p>
