@@ -47,6 +47,12 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
   .back-link {
     color: var(--purple-300);
     text-decoration: none;
@@ -57,7 +63,44 @@
     transition: all 0.3s ease;
   }
   .back-link:hover { background: rgba(124, 77, 255, 0.15); }
-  main { max-width: 1200px; margin: 0 auto; padding: 16px 24px 80px; }
+
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(124, 77, 255, 0.15);
+    border: 1px solid rgba(124, 77, 255, 0.35);
+    border-radius: 50px;
+    padding: 3px 5px;
+    transition: all 0.3s ease;
+  }
+  .lang-switch:hover {
+    border-color: var(--purple-400);
+    box-shadow: 0 0 16px rgba(124, 77, 255, 0.3);
+  }
+  .lang-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+  .lang-btn.active {
+    background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
+    color: #fff;
+    box-shadow: 0 2px 10px var(--purple-glow);
+  }
+  .lang-btn:hover:not(.active) { color: var(--purple-300); }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 16px 24px 40px; }
 
   /* 活动头部 */
   .event-header {
@@ -434,36 +477,199 @@
   .toast.success { background: linear-gradient(135deg, #22c55e, #16a34a); }
   .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
 
+  /* ========== 底部声明 ========== */
+  footer {
+    text-align: center;
+    padding: 32px 24px 40px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    border-top: 1px solid rgba(124, 77, 255, 0.15);
+    background: rgba(26, 11, 46, 0.6);
+    margin-top: 20px;
+  }
+  .footer-compliance {
+    max-width: 900px;
+    margin: 0 auto 14px;
+    line-height: 2;
+  }
+  .footer-compliance a {
+    color: var(--purple-300);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(196, 167, 255, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .footer-compliance a:hover {
+    color: var(--purple-200);
+    border-bottom-color: var(--purple-300);
+    text-shadow: 0 0 12px var(--purple-glow);
+  }
+  .footer-copy { opacity: 0.8; font-size: 0.78rem; }
+
+  /* 政策弹窗 */
+  .policy-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 5, 20, 0.88);
+    z-index: 30000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .policy-modal.open { display: flex; }
+  .policy-modal-content {
+    max-width: 800px;
+    width: 100%;
+    max-height: 85vh;
+    background: linear-gradient(145deg, #2a1747, #1a0b2e);
+    border: 1px solid rgba(124, 77, 255, 0.35);
+    border-radius: 20px;
+    padding: 36px 32px;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(124, 77, 255, 0.35);
+    position: relative;
+    animation: modalIn 0.35s ease;
+  }
+  .policy-modal-content::-webkit-scrollbar { width: 6px; }
+  .policy-modal-content::-webkit-scrollbar-track {
+    background: rgba(124, 77, 255, 0.06);
+    border-radius: 3px;
+  }
+  .policy-modal-content::-webkit-scrollbar-thumb {
+    background: rgba(124, 77, 255, 0.35);
+    border-radius: 3px;
+  }
+  .policy-modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(124, 77, 255, 0.6);
+  }
+  .policy-modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: rgba(124, 77, 255, 0.2);
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    color: var(--purple-300);
+    font-size: 1.4rem;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-family: inherit;
+  }
+  .policy-modal-close:hover {
+    background: var(--purple-500);
+    color: #fff;
+    transform: rotate(90deg);
+    box-shadow: 0 0 24px var(--purple-glow);
+  }
+  .policy-modal-content h2 {
+    font-size: 1.4rem;
+    color: var(--purple-300);
+    margin-bottom: 6px;
+    padding-right: 48px;
+  }
+  .policy-modal-content .policy-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(124, 77, 255, 0.15);
+    letter-spacing: 0.5px;
+  }
+  .policy-modal-content h3 {
+    font-size: 1rem;
+    color: var(--purple-200);
+    margin: 20px 0 8px;
+  }
+  .policy-modal-content h3:first-of-type { margin-top: 0; }
+  .policy-modal-content p {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    margin-bottom: 10px;
+    line-height: 1.9;
+  }
+  .policy-modal-content ul {
+    list-style: none;
+    padding-left: 4px;
+    margin-bottom: 12px;
+  }
+  .policy-modal-content ul li {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding: 4px 0 4px 20px;
+    position: relative;
+    line-height: 1.8;
+  }
+  .policy-modal-content ul li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--purple-500);
+    font-size: 0.6rem;
+    top: 9px;
+  }
+  .policy-modal-content .policy-footer-note {
+    margin-top: 24px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(124, 77, 255, 0.15);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: center;
+    font-style: italic;
+  }
+
   @media (max-width: 768px) {
     .form-panel { grid-template-columns: 1fr; }
     .parking-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
     .parking-spot .spot-img { height: 70px; }
     .route-block { padding: 16px; }
+    .policy-modal-content { padding: 28px 20px; }
+    .policy-modal-content h2 { font-size: 1.2rem; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>共驰车队车位选择系统</h1>
-  <a href="../" class="back-link">← 返回主站</a>
+  <h1 data-i18n="page_title">共驰车队车位选择系统</h1>
+  <div class="header-right">
+    <div class="lang-switch">
+      <button class="lang-btn active" id="btnZh" onclick="setLanguage('zh')">中文</button>
+      <button class="lang-btn" id="btnEn" onclick="setLanguage('en')">EN</button>
+    </div>
+    <a href="../" class="back-link" data-i18n="back_link">← 返回主站</a>
+  </div>
 </header>
 
 <main>
   <div id="eventContainer">
-    <div class="loading">加载中...</div>
+    <div class="loading" data-i18n="loading">加载中...</div>
   </div>
 </main>
+
+<footer>
+  <div class="footer-compliance" id="footerCompliance"></div>
+  <div class="footer-copy" data-i18n="footer_copy">
+    © 2026 China GC Team 共驰车队 · All final interpretation rights belong to GC Team
+  </div>
+</footer>
 
 <!-- 选车位确认 -->
 <div class="modal" id="confirmModal">
   <div class="modal-content">
     <div class="modal-icon">🅿️</div>
-    <h3>确认占用该车位？</h3>
+    <h3 data-i18n="confirm_title">确认占用该车位？</h3>
     <p id="confirmInfo">--</p>
     <div class="modal-btns">
-      <button class="btn btn-ghost" onclick="closeModal('confirmModal')">取消</button>
-      <button class="btn btn-primary" onclick="confirmSelection()">确认占用</button>
+      <button class="btn btn-ghost" onclick="closeModal('confirmModal')" data-i18n="btn_cancel">取消</button>
+      <button class="btn btn-primary" onclick="confirmSelection()" data-i18n="btn_confirm">确认占用</button>
     </div>
   </div>
 </div>
@@ -472,11 +678,11 @@
 <div class="modal" id="revertAllModal">
   <div class="modal-content">
     <div class="modal-icon">⚠️</div>
-    <h3>撤回全部车位？</h3>
-    <p>你车队占用的 <strong id="revertAllCount">0</strong> 个车位将全部恢复可选。</p>
+    <h3 data-i18n="revert_all_title">撤回全部车位？</h3>
+    <p><span data-i18n="revert_all_desc1">你车队占用的</span> <strong id="revertAllCount">0</strong> <span data-i18n="revert_all_desc2">个车位将全部恢复可选。</span></p>
     <div class="modal-btns">
-      <button class="btn btn-ghost" onclick="closeModal('revertAllModal')">取消</button>
-      <button class="btn btn-primary" style="background:linear-gradient(135deg,#ef4444,#dc2626);" onclick="confirmRevertAll()">确认撤回全部</button>
+      <button class="btn btn-ghost" onclick="closeModal('revertAllModal')" data-i18n="btn_cancel">取消</button>
+      <button class="btn btn-primary" style="background:linear-gradient(135deg,#ef4444,#dc2626);" onclick="confirmRevertAll()" data-i18n="btn_confirm_revert_all">确认撤回全部</button>
     </div>
   </div>
 </div>
@@ -485,12 +691,20 @@
 <div class="modal" id="revertOneModal">
   <div class="modal-content">
     <div class="modal-icon">⚠️</div>
-    <h3>撤回该车位？</h3>
-    <p>车位 <strong id="revertOneNum">--</strong> 将恢复可选。</p>
+    <h3 data-i18n="revert_one_title">撤回该车位？</h3>
+    <p><span data-i18n="revert_one_desc1">车位</span> <strong id="revertOneNum">--</strong> <span data-i18n="revert_one_desc2">将恢复可选。</span></p>
     <div class="modal-btns">
-      <button class="btn btn-ghost" onclick="closeModal('revertOneModal')">取消</button>
-      <button class="btn btn-primary" style="background:linear-gradient(135deg,#ef4444,#dc2626);" onclick="confirmRevertOne()">确认撤回</button>
+      <button class="btn btn-ghost" onclick="closeModal('revertOneModal')" data-i18n="btn_cancel">取消</button>
+      <button class="btn btn-primary" style="background:linear-gradient(135deg,#ef4444,#dc2626);" onclick="confirmRevertOne()" data-i18n="btn_confirm_revert">确认撤回</button>
     </div>
+  </div>
+</div>
+
+<!-- 政策弹窗 -->
+<div class="policy-modal" id="policyModal">
+  <div class="policy-modal-content">
+    <button class="policy-modal-close" onclick="closePolicyModal()">×</button>
+    <div id="policyModalBody"></div>
   </div>
 </div>
 
@@ -498,11 +712,151 @@
 
 <script>
   /* =====================================================
-     配置：替换成你自己的 Supabase 项目
+     国际化
+     ===================================================== */
+  const I18N = {
+    zh: {
+      page_title: '共驰车队车位选择系统',
+      back_link: '← 返回主站',
+      loading: '加载中...',
+      footer_compliance: '车队遵循 <a onclick="openPolicyModal(\'gdpr\')">GDPR</a> 相关规范，并遵守 <a onclick="openPolicyModal(\'tos\')">服务条款</a> 与 <a onclick="openPolicyModal(\'privacy\')">隐私政策</a>。',
+      footer_copy: '© 2026 China GC Team 共驰车队 · All final interpretation rights belong to GC Team',
+      confirm_title: '确认占用该车位？',
+      revert_all_title: '撤回全部车位？',
+      revert_all_desc1: '你车队占用的',
+      revert_all_desc2: '个车位将全部恢复可选。',
+      revert_one_title: '撤回该车位？',
+      revert_one_desc1: '车位',
+      revert_one_desc2: '将恢复可选。',
+      btn_cancel: '取消',
+      btn_confirm: '确认占用',
+      btn_confirm_revert_all: '确认撤回全部',
+      btn_confirm_revert: '确认撤回',
+      toast_fill_team: '请先填写车队名称',
+      toast_fill_contact: '请先填写联系方式',
+      toast_fill_both: '请先填写车队名称和联系方式',
+      toast_success: '车位 {num} 占用成功！',
+      toast_revert_one: '车位 {num} 已撤回',
+      toast_revert_all: '全部车位已撤回',
+      toast_taken: '手慢了，该车位已被抢',
+      toast_no_spots: '你还没有占用任何车位',
+      toast_click_spot: '请点击一个可选车位',
+      toast_error: '提交失败：',
+      toast_revert_error: '撤回失败：',
+      event_latest: '最新活动',
+      event_published: '发布时间：',
+      my_team: '你的车队',
+      my_team_spots: '已占 {n} 个车位：',
+      revert_all_btn: '撤回全部车位',
+      field_team: '车队名称 *',
+      field_team_placeholder: '请输入车队名称',
+      field_contact: '联系方式 *',
+      field_contact_placeholder: 'QQ 或手机号',
+      start_select: '开始选车位',
+      stat_free: '可选：',
+      stat_taken: '已占用：',
+      stat_total: '总计：',
+      route: '路线',
+      spot_free: '可选',
+      no_spots: '该路线暂无车位',
+      no_event: '管理员尚未发布活动',
+      no_routes: '本次活动暂无路线',
+      load_error: '加载活动失败',
+      confirm_spot: '车位：',
+      confirm_team: '车队：',
+      /* 政策标题 */
+      policy_gdpr_title: 'GDPR 合规声明',
+      policy_gdpr_meta: '通用数据保护条例（General Data Protection Regulation）· 最后更新：2026 年 1 月',
+      policy_tos_title: '服务条款',
+      policy_tos_meta: 'Terms of Service · 最后更新：2026 年 1 月',
+      policy_privacy_title: '隐私政策',
+      policy_privacy_meta: 'Privacy Policy · 最后更新：2026 年 1 月'
+    },
+    en: {
+      page_title: 'GC Team Parking Spot Selection',
+      back_link: '← Back to Home',
+      loading: 'Loading...',
+      footer_compliance: 'The team complies with <a onclick="openPolicyModal(\'gdpr\')">GDPR</a> regulations and abides by the <a onclick="openPolicyModal(\'tos\')">Terms of Service</a> and <a onclick="openPolicyModal(\'privacy\')">Privacy Policy</a>.',
+      footer_copy: '© 2026 China GC Team · All final interpretation rights belong to GC Team',
+      confirm_title: 'Confirm this parking spot?',
+      revert_all_title: 'Revert all parking spots?',
+      revert_all_desc1: 'Your team\'s',
+      revert_all_desc2: 'spot(s) will all be restored to available.',
+      revert_one_title: 'Revert this parking spot?',
+      revert_one_desc1: 'Spot',
+      revert_one_desc2: 'will be restored to available.',
+      btn_cancel: 'Cancel',
+      btn_confirm: 'Confirm',
+      btn_confirm_revert_all: 'Confirm Revert All',
+      btn_confirm_revert: 'Confirm Revert',
+      toast_fill_team: 'Please enter team name first',
+      toast_fill_contact: 'Please enter contact first',
+      toast_fill_both: 'Please fill in team name and contact',
+      toast_success: 'Spot {num} occupied successfully!',
+      toast_revert_one: 'Spot {num} reverted',
+      toast_revert_all: 'All spots reverted',
+      toast_taken: 'Too slow, this spot has been taken',
+      toast_no_spots: 'You haven\'t occupied any spots',
+      toast_click_spot: 'Please click an available spot',
+      toast_error: 'Submit failed: ',
+      toast_revert_error: 'Revert failed: ',
+      event_latest: 'Latest Event',
+      event_published: 'Published: ',
+      my_team: 'Your Team',
+      my_team_spots: 'Occupied {n} spot(s): ',
+      revert_all_btn: 'Revert All Spots',
+      field_team: 'Team Name *',
+      field_team_placeholder: 'Enter team name',
+      field_contact: 'Contact *',
+      field_contact_placeholder: 'QQ or Phone',
+      start_select: 'Start Selecting',
+      stat_free: 'Available: ',
+      stat_taken: 'Taken: ',
+      stat_total: 'Total: ',
+      route: 'Route',
+      spot_free: 'Available',
+      no_spots: 'No spots on this route',
+      no_event: 'No event published yet',
+      no_routes: 'No routes for this event',
+      load_error: 'Failed to load event',
+      confirm_spot: 'Spot: ',
+      confirm_team: 'Team: ',
+      policy_gdpr_title: 'GDPR Compliance Statement',
+      policy_gdpr_meta: 'General Data Protection Regulation · Last updated: January 2026',
+      policy_tos_title: 'Terms of Service',
+      policy_tos_meta: 'Terms of Service · Last updated: January 2026',
+      policy_privacy_title: 'Privacy Policy',
+      policy_privacy_meta: 'Privacy Policy · Last updated: January 2026'
+    }
+  };
+
+  let currentLang = 'zh';
+  function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || key; }
+
+  function setLanguage(lang) {
+    if (!I18N[lang]) return;
+    currentLang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (I18N[lang][key] !== undefined) el.textContent = I18N[lang][key];
+    });
+    document.getElementById('btnZh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    document.title = lang === 'zh' ? '共驰车队车位选择系统' : 'GC Team Parking Spot Selection';
+    renderFooter();
+    if (currentEvent) renderPage();
+  }
+
+  function renderFooter() {
+    document.getElementById('footerCompliance').innerHTML = t('footer_compliance');
+  }
+
+  /* =====================================================
+     配置
      ===================================================== */
   const SUPABASE_URL = 'https://wjwhrmtivatvzqgrvjjc.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_CHje6Szxcl27CoDMQ0LUtg_i5e5FiO0';
-
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const MY_TEAM_KEY = 'gc_parking_my_team';
@@ -518,41 +872,26 @@
      ===================================================== */
   async function loadLatestEvent() {
     const { data: events, error } = await sb
-      .from('events')
-      .select('*')
-      .eq('is_active', true)
-      .order('created_at', { ascending: false })
-      .limit(1);
-
-    if (error) { console.error(error); showError('加载活动失败'); return; }
-    if (!events || !events.length) { showEmpty('管理员尚未发布活动'); return; }
-
+      .from('events').select('*').eq('is_active', true)
+      .order('created_at', { ascending: false }).limit(1);
+    if (error) { console.error(error); showError(t('load_error')); return; }
+    if (!events || !events.length) { showEmpty(t('no_event')); return; }
     currentEvent = events[0];
     await loadRoutesAndSpots(currentEvent.id);
     renderPage();
   }
 
-  /* =====================================================
-     加载路线和车位
-     ===================================================== */
   async function loadRoutesAndSpots(eventId) {
     const { data: routes, error: routeErr } = await sb
-      .from('routes')
-      .select('*')
-      .eq('event_id', eventId)
-      .order('sort_order', { ascending: true })
-      .order('created_at', { ascending: true });
-
+      .from('routes').select('*').eq('event_id', eventId)
+      .order('sort_order', { ascending: true }).order('created_at', { ascending: true });
     if (routeErr) { console.error(routeErr); return; }
     if (!routes || !routes.length) { currentRoutes = []; return; }
 
     const routeIds = routes.map(r => r.id);
     const { data: spots, error: spotErr } = await sb
-      .from('parking_spots')
-      .select('*')
-      .in('route_id', routeIds)
+      .from('parking_spots').select('*').in('route_id', routeIds)
       .order('spot_number', { ascending: true });
-
     if (spotErr) { console.error(spotErr); return; }
 
     currentRoutes = routes.map(route => ({
@@ -568,49 +907,43 @@
     const container = document.getElementById('eventContainer');
     const myTeam = JSON.parse(localStorage.getItem(MY_TEAM_KEY) || 'null');
 
-    if (!currentEvent) { showEmpty('管理员尚未发布活动'); return; }
-    if (!currentRoutes.length) { showEmpty('本次活动暂无路线'); return; }
+    if (!currentEvent) { showEmpty(t('no_event')); return; }
+    if (!currentRoutes.length) { showEmpty(t('no_routes')); return; }
 
     let totalSpots = 0, freeSpots = 0, takenSpots = 0;
-    currentRoutes.forEach(r => {
-      r.spots.forEach(s => {
-        totalSpots++;
-        if (s.is_taken) takenSpots++; else freeSpots++;
-      });
-    });
+    currentRoutes.forEach(r => r.spots.forEach(s => {
+      totalSpots++;
+      if (s.is_taken) takenSpots++; else freeSpots++;
+    }));
 
     let html = '';
 
     // 活动头部
-    const eventTime = new Date(currentEvent.created_at).toLocaleString('zh-CN');
+    const eventTime = new Date(currentEvent.created_at).toLocaleString(currentLang === 'zh' ? 'zh-CN' : 'en-US');
     html += `
       <div class="event-header">
-        <h2>🚛 ${escapeHtml(currentEvent.title)}<span class="badge">最新活动</span></h2>
+        <h2>🚛 ${escapeHtml(currentEvent.title)}<span class="badge">${t('event_latest')}</span></h2>
         ${currentEvent.description ? `<div class="desc">${escapeHtml(currentEvent.description)}</div>` : ''}
-        <div class="time">发布时间：${eventTime}</div>
+        <div class="time">${t('event_published')}${eventTime}</div>
       </div>
     `;
 
     // 我的车队提示条
     const mySpotsList = [];
-    currentRoutes.forEach(r => {
-      r.spots.forEach(s => {
-        if (s.is_taken && myTeam && s.team_name === myTeam.team) {
-          mySpotsList.push(s.spot_number);
-        }
-      });
-    });
+    currentRoutes.forEach(r => r.spots.forEach(s => {
+      if (s.is_taken && myTeam && s.team_name === myTeam.team) mySpotsList.push(s.spot_number);
+    }));
     const showMyBar = myTeam && mySpotsList.length > 0;
 
     html += `
       <div class="my-team-bar ${showMyBar ? 'show' : ''}" id="myTeamBar">
         <div class="info">
-          ✅ 你的车队 <strong>${myTeam ? escapeHtml(myTeam.team) : '--'}</strong>
+          ✅ ${t('my_team')} <strong>${myTeam ? escapeHtml(myTeam.team) : '--'}</strong>
           <span class="spots-count">
-            ${showMyBar ? `（已占 ${mySpotsList.length} 个车位：${mySpotsList.join('、')}）` : ''}
+            ${showMyBar ? `（${t('my_team_spots').replace('{n}', mySpotsList.length)}${mySpotsList.join(', ')}）` : ''}
           </span>
         </div>
-        <button class="btn-revert-all" onclick="openRevertAllModal()">撤回全部车位</button>
+        <button class="btn-revert-all" onclick="openRevertAllModal()">${t('revert_all_btn')}</button>
       </div>
     `;
 
@@ -619,19 +952,19 @@
     html += `
       <div class="form-panel" id="formPanel" ${disableForm ? 'style="opacity:0.6;"' : ''}>
         <div class="field">
-          <label>车队名称 *</label>
-          <input type="text" id="teamInput" placeholder="请输入车队名称" maxlength="20"
+          <label>${t('field_team')}</label>
+          <input type="text" id="teamInput" placeholder="${t('field_team_placeholder')}" maxlength="20"
                  value="${myTeam ? escapeHtml(myTeam.team) : ''}"
                  ${disableForm ? 'disabled' : ''}>
         </div>
         <div class="field">
-          <label>联系方式 *</label>
-          <input type="text" id="contactInput" placeholder="QQ 或手机号" maxlength="20"
+          <label>${t('field_contact')}</label>
+          <input type="text" id="contactInput" placeholder="${t('field_contact_placeholder')}" maxlength="20"
                  value="${myTeam ? escapeHtml(myTeam.contact || '') : ''}"
                  ${disableForm ? 'disabled' : ''}>
         </div>
         <div>
-          <button class="btn btn-primary" onclick="scrollToGrid()">开始选车位</button>
+          <button class="btn btn-primary" onclick="scrollToGrid()">${t('start_select')}</button>
         </div>
       </div>
     `;
@@ -639,9 +972,9 @@
     // 统计
     html += `
       <div class="stats-bar">
-        <div class="stat-item">可选：<strong>${freeSpots}</strong></div>
-        <div class="stat-item">已占用：<strong>${takenSpots}</strong></div>
-        <div class="stat-item">总计：<strong>${totalSpots}</strong></div>
+        <div class="stat-item">${t('stat_free')}<strong>${freeSpots}</strong></div>
+        <div class="stat-item">${t('stat_taken')}<strong>${takenSpots}</strong></div>
+        <div class="stat-item">${t('stat_total')}<strong>${totalSpots}</strong></div>
       </div>
     `;
 
@@ -653,23 +986,19 @@
       html += `
         <div class="route-block" id="route-${route.id}">
           <div class="route-header">
-            <h3>📍 ${escapeHtml(route.name)}<span class="route-badge">路线 ${idx + 1}</span></h3>
+            <h3>📍 ${escapeHtml(route.name)}<span class="route-badge">${t('route')} ${idx + 1}</span></h3>
             <div class="route-stats">
-              可选 ${routeFree} / 已占 ${routeTaken} / 共 ${route.spots.length}
+              ${t('stat_free')}${routeFree} / ${t('stat_taken')}${routeTaken} / ${t('stat_total')}${route.spots.length}
             </div>
           </div>
       `;
 
       if (route.map_image_url) {
-        html += `
-          <div class="route-map">
-            <img src="${route.map_image_url}" alt="${escapeHtml(route.name)}">
-          </div>
-        `;
+        html += `<div class="route-map"><img src="${route.map_image_url}" alt="${escapeHtml(route.name)}"></div>`;
       }
 
       if (!route.spots.length) {
-        html += `<div class="empty-hint"><span class="icon">🅿️</span>该路线暂无车位</div>`;
+        html += `<div class="empty-hint"><span class="icon">🅿️</span>${t('no_spots')}</div>`;
       } else {
         html += `<div class="parking-grid">`;
         route.spots.forEach(spot => {
@@ -688,7 +1017,7 @@
             html += `<img src="${spot.image_url}" class="spot-img" alt="${spot.spot_number}">`;
           }
           html += `<div class="spot-num">${spot.spot_number}</div>`;
-          html += `<div class="spot-team">${spot.is_taken ? escapeHtml(spot.team_name || '') : '可选'}</div>`;
+          html += `<div class="spot-team">${spot.is_taken ? escapeHtml(spot.team_name || '') : t('spot_free')}</div>`;
           html += `</div>`;
         });
         html += `</div>`;
@@ -700,13 +1029,11 @@
     container.innerHTML = html;
 
     // 绑定点击
-    currentRoutes.forEach(route => {
-      route.spots.forEach(spot => {
-        if (spot.is_taken) return;
-        const el = container.querySelector(`[data-id="${spot.id}"]`);
-        if (el) el.onclick = () => handleSpotClick(spot);
-      });
-    });
+    currentRoutes.forEach(route => route.spots.forEach(spot => {
+      if (spot.is_taken) return;
+      const el = container.querySelector(`[data-id="${spot.id}"]`);
+      if (el) el.onclick = () => handleSpotClick(spot);
+    }));
   }
 
   /* =====================================================
@@ -716,21 +1043,13 @@
     const team = document.getElementById('teamInput').value.trim();
     const contact = document.getElementById('contactInput').value.trim();
 
-    if (!team) {
-      showToast('请先填写车队名称', 'error');
-      document.getElementById('teamInput').focus();
-      return;
-    }
-    if (!contact) {
-      showToast('请先填写联系方式', 'error');
-      document.getElementById('contactInput').focus();
-      return;
-    }
+    if (!team) { showToast(t('toast_fill_team'), 'error'); document.getElementById('teamInput').focus(); return; }
+    if (!contact) { showToast(t('toast_fill_contact'), 'error'); document.getElementById('contactInput').focus(); return; }
 
     pendingSpot = spot;
     document.getElementById('confirmInfo').innerHTML =
-      `车位：<strong>${spot.spot_number}</strong><br>` +
-      `车队：${escapeHtml(team)}`;
+      `${t('confirm_spot')}<strong>${spot.spot_number}</strong><br>` +
+      `${t('confirm_team')}${escapeHtml(team)}`;
     openModal('confirmModal');
   }
 
@@ -739,33 +1058,16 @@
      ===================================================== */
   async function confirmSelection() {
     if (!pendingSpot) return;
-
     const team = document.getElementById('teamInput').value.trim();
     const contact = document.getElementById('contactInput').value.trim();
 
-    const { data, error } = await sb
-      .from('parking_spots')
-      .update({
-        is_taken: true,
-        team_name: team,
-        contact: contact,
-        taken_at: new Date().toISOString()
-      })
-      .eq('id', pendingSpot.id)
-      .eq('is_taken', false)
-      .select();
+    const { data, error } = await sb.from('parking_spots')
+      .update({ is_taken: true, team_name: team, contact: contact, taken_at: new Date().toISOString() })
+      .eq('id', pendingSpot.id).eq('is_taken', false).select();
 
-    if (error) {
-      showToast('提交失败：' + error.message, 'error');
-      closeModal('confirmModal');
-      return;
-    }
-
+    if (error) { showToast(t('toast_error') + error.message, 'error'); closeModal('confirmModal'); return; }
     if (!data || !data.length) {
-      showToast('手慢了，该车位已被抢', 'error');
-      closeModal('confirmModal');
-      await refresh();
-      return;
+      showToast(t('toast_taken'), 'error'); closeModal('confirmModal'); await refresh(); return;
     }
 
     localStorage.setItem(MY_TEAM_KEY, JSON.stringify({ team, contact }));
@@ -775,7 +1077,7 @@
       localStorage.setItem(MY_SPOTS_KEY, JSON.stringify(mySpots));
     }
 
-    showToast(`车位 ${pendingSpot.spot_number} 占用成功！`, 'success');
+    showToast(t('toast_success').replace('{num}', pendingSpot.spot_number), 'success');
     closeModal('confirmModal');
     await refresh();
   }
@@ -791,29 +1093,18 @@
 
   async function confirmRevertOne() {
     if (!revertOneSpot) return;
-
-    const { error } = await sb
-      .from('parking_spots')
+    const { error } = await sb.from('parking_spots')
       .update({ is_taken: false, team_name: null, contact: null, taken_at: null })
-      .eq('id', revertOneSpot.id)
-      .eq('is_taken', true);
+      .eq('id', revertOneSpot.id).eq('is_taken', true);
 
-    if (error) {
-      showToast('撤回失败：' + error.message, 'error');
-      closeModal('revertOneModal');
-      return;
-    }
+    if (error) { showToast(t('toast_revert_error') + error.message, 'error'); closeModal('revertOneModal'); return; }
 
     let mySpots = JSON.parse(localStorage.getItem(MY_SPOTS_KEY) || '[]');
     mySpots = mySpots.filter(n => n !== revertOneSpot.number);
-    if (mySpots.length) {
-      localStorage.setItem(MY_SPOTS_KEY, JSON.stringify(mySpots));
-    } else {
-      localStorage.removeItem(MY_TEAM_KEY);
-      localStorage.removeItem(MY_SPOTS_KEY);
-    }
+    if (mySpots.length) localStorage.setItem(MY_SPOTS_KEY, JSON.stringify(mySpots));
+    else { localStorage.removeItem(MY_TEAM_KEY); localStorage.removeItem(MY_SPOTS_KEY); }
 
-    showToast(`车位 ${revertOneSpot.number} 已撤回`, 'success');
+    showToast(t('toast_revert_one').replace('{num}', revertOneSpot.number), 'success');
     closeModal('revertOneModal');
     revertOneSpot = null;
     await refresh();
@@ -824,13 +1115,13 @@
      ===================================================== */
   function openRevertAllModal() {
     const myTeam = JSON.parse(localStorage.getItem(MY_TEAM_KEY) || 'null');
-    if (!myTeam) { showToast('你还没有占用任何车位', 'error'); return; }
+    if (!myTeam) { showToast(t('toast_no_spots'), 'error'); return; }
 
     let count = 0;
     currentRoutes.forEach(r => r.spots.forEach(s => {
       if (s.is_taken && s.team_name === myTeam.team) count++;
     }));
-    if (!count) { showToast('你还没有占用任何车位', 'error'); return; }
+    if (!count) { showToast(t('toast_no_spots'), 'error'); return; }
 
     document.getElementById('revertAllCount').textContent = count;
     openModal('revertAllModal');
@@ -840,53 +1131,38 @@
     const myTeam = JSON.parse(localStorage.getItem(MY_TEAM_KEY) || 'null');
     if (!myTeam) return;
 
-    const { error } = await sb
-      .from('parking_spots')
+    const { error } = await sb.from('parking_spots')
       .update({ is_taken: false, team_name: null, contact: null, taken_at: null })
-      .eq('is_taken', true)
-      .eq('team_name', myTeam.team);
+      .eq('is_taken', true).eq('team_name', myTeam.team);
 
-    if (error) {
-      showToast('撤回失败：' + error.message, 'error');
-      closeModal('revertAllModal');
-      return;
-    }
+    if (error) { showToast(t('toast_revert_error') + error.message, 'error'); closeModal('revertAllModal'); return; }
 
     localStorage.removeItem(MY_TEAM_KEY);
     localStorage.removeItem(MY_SPOTS_KEY);
 
-    showToast('全部车位已撤回', 'success');
+    showToast(t('toast_revert_all'), 'success');
     closeModal('revertAllModal');
     await refresh();
   }
 
   /* =====================================================
-     滚动
+     滚动 / 刷新 / 订阅
      ===================================================== */
   function scrollToGrid() {
     const team = document.getElementById('teamInput').value.trim();
     const contact = document.getElementById('contactInput').value.trim();
-    if (!team || !contact) {
-      showToast('请先填写车队名称和联系方式', 'error');
-      return;
-    }
+    if (!team || !contact) { showToast(t('toast_fill_both'), 'error'); return; }
     const firstRoute = document.querySelector('.route-block');
     if (firstRoute) firstRoute.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    showToast('请点击一个可选车位', 'success');
+    showToast(t('toast_click_spot'), 'success');
   }
 
-  /* =====================================================
-     刷新
-     ===================================================== */
   async function refresh() {
     if (!currentEvent) return;
     await loadRoutesAndSpots(currentEvent.id);
     renderPage();
   }
 
-  /* =====================================================
-     实时订阅
-     ===================================================== */
   function subscribeChanges() {
     sb.channel('parking-changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'parking_spots' }, refresh)
@@ -920,17 +1196,261 @@
 
   let toastTimer;
   function showToast(msg, type = '') {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast show ' + type;
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast show ' + type;
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.className = 'toast ' + type, 2600);
+    toastTimer = setTimeout(() => el.className = 'toast ' + type, 2600);
   }
+
+  /* =====================================================
+     政策弹窗
+     ===================================================== */
+  function getPolicyData(type) {
+    const lang = currentLang;
+    if (type === 'gdpr') {
+      return {
+        title: I18N[lang].policy_gdpr_title,
+        meta: I18N[lang].policy_gdpr_meta,
+        body: lang === 'zh' ? `
+          <h3>1. 我们的承诺</h3>
+          <p>中国共驰车队（China GC Team）尊重并保护所有访客与成员的欧盟《通用数据保护条例》（GDPR）权利。我们致力于透明、合法地处理个人数据。</p>
+          <h3>2. 数据控制者</h3>
+          <p>本系统及车队相关服务的数据控制者为 China GC Team。如需行使 GDPR 权利，请通过车队接待群或 TruckersMP VTC 平台联系我们。</p>
+          <h3>3. 我们收集的数据</h3>
+          <ul>
+            <li>您主动提供的车队名称、联系方式（QQ/手机号）等车位预约所需信息。</li>
+            <li>系统运行过程中产生的必要技术日志，仅用于安全与性能分析。</li>
+            <li>我们不主动收集任何敏感个人数据，也不对访客进行画像或自动化决策。</li>
+          </ul>
+          <h3>4. 数据处理的法律依据</h3>
+          <ul>
+            <li>履行车位预约服务所必需。</li>
+            <li>基于您的同意（如提交车队信息占用车位）。</li>
+            <li>基于合法利益（如维护系统安全、防止滥用）。</li>
+          </ul>
+          <h3>5. 数据保留与共享</h3>
+          <p>我们仅在实现上述目的所必需的期限内保留您的数据。除法律要求或为提供车队服务所必需外，我们不会向第三方出售或共享您的个人数据。</p>
+          <h3>6. 您的 GDPR 权利</h3>
+          <ul>
+            <li><strong>访问权</strong>：您有权要求获取我们持有的关于您的个人数据副本。</li>
+            <li><strong>更正权</strong>：您有权要求更正不准确或不完整的数据。</li>
+            <li><strong>删除权（被遗忘权）</strong>：在法定条件下，您有权要求删除您的个人数据。</li>
+            <li><strong>限制处理权</strong>：您有权要求限制对您数据的处理。</li>
+            <li><strong>数据可携带权</strong>：您有权以结构化、通用格式获取您的数据。</li>
+            <li><strong>反对权</strong>：您有权反对基于合法利益的处理。</li>
+          </ul>
+          <h3>7. 行使权利</h3>
+          <p>如需行使上述任何权利，请通过本页面底部的联系方式与我们取得联系。我们将在 30 天内回复您的请求。</p>
+          <h3>8. 数据安全</h3>
+          <p>我们采取合理的技术与管理措施保护您的个人数据免遭未经授权的访问、泄露或滥用。</p>
+          <div class="policy-footer-note">本声明为 China GC Team 对 GDPR 的合规承诺，最终解释权归本车队所有。</div>
+        ` : `
+          <h3>1. Our Commitment</h3>
+          <p>China GongChi Team ("the Team") respects and protects the EU General Data Protection Regulation (GDPR) rights of all visitors and members. We are committed to transparent and lawful processing of personal data.</p>
+          <h3>2. Data Controller</h3>
+          <p>The data controller for this system and related team services is China GC Team. To exercise GDPR rights, please contact us via the team QQ group or the TruckersMP VTC platform.</p>
+          <h3>3. Data We Collect</h3>
+          <ul>
+            <li>Information you voluntarily provide, such as team name and contact details (QQ/phone), required for parking spot reservation.</li>
+            <li>Necessary technical logs generated during system operation, used solely for security and performance analysis.</li>
+            <li>We do not actively collect sensitive personal data, nor do we profile visitors or make automated decisions.</li>
+          </ul>
+          <h3>4. Legal Basis for Processing</h3>
+          <ul>
+            <li>Necessary for providing the parking spot reservation service.</li>
+            <li>Based on your consent (e.g., submitting team information to reserve a spot).</li>
+            <li>Based on legitimate interests (e.g., maintaining system security, preventing abuse).</li>
+          </ul>
+          <h3>5. Data Retention & Sharing</h3>
+          <p>We retain your data only for as long as necessary for the purposes above. We do not sell or share your personal data with third parties except as required by law or to provide team services.</p>
+          <h3>6. Your GDPR Rights</h3>
+          <ul>
+            <li><strong>Right of Access</strong>: You have the right to request a copy of your personal data held by us.</li>
+            <li><strong>Right to Rectification</strong>: You have the right to request correction of inaccurate or incomplete data.</li>
+            <li><strong>Right to Erasure (Right to be Forgotten)</strong>: Under legal conditions, you have the right to request deletion of your personal data.</li>
+            <li><strong>Right to Restrict Processing</strong>: You have the right to request restriction of processing of your data.</li>
+            <li><strong>Right to Data Portability</strong>: You have the right to receive your data in a structured, commonly used format.</li>
+            <li><strong>Right to Object</strong>: You have the right to object to processing based on legitimate interests.</li>
+          </ul>
+          <h3>7. Exercising Your Rights</h3>
+          <p>To exercise any of the above rights, please contact us via the contact information at the bottom of this page. We will respond to your request within 30 days.</p>
+          <h3>8. Data Security</h3>
+          <p>We take reasonable technical and organizational measures to protect your personal data from unauthorized access, disclosure, or misuse.</p>
+          <div class="policy-footer-note">This statement is China GC Team's GDPR compliance commitment. All final interpretation rights belong to the Team.</div>
+        `
+      };
+    }
+    if (type === 'tos') {
+      return {
+        title: I18N[lang].policy_tos_title,
+        meta: I18N[lang].policy_tos_meta,
+        body: lang === 'zh' ? `
+          <h3>1. 接受条款</h3>
+          <p>访问或使用中国共驰车队（China GC Team）车位选择系统及相关服务，即表示您已阅读、理解并同意受本服务条款的约束。如果您不同意本条款，请停止使用本系统及车队服务。</p>
+          <h3>2. 服务描述</h3>
+          <p>本系统为中国共驰车队活动车位预约平台，提供车位选择、占用、撤回等功能，方便各参与车队统一协调车位安排。</p>
+          <h3>3. 用户行为规范</h3>
+          <ul>
+            <li>您同意遵守 TruckersMP 平台规则、游戏发行商条款以及本车队公布的各项规则。</li>
+            <li>您不得利用本系统从事任何违法、侵权、骚扰、欺诈或破坏网络安全的行为。</li>
+            <li>您不得冒用车队名称或恶意占用、撤回他人车位，扰乱活动秩序。</li>
+            <li>车队有权对违反规则的用户采取警告、限制或取消车位等措施。</li>
+          </ul>
+          <h3>4. 知识产权</h3>
+          <p>本系统使用的 Logo、文字、图片（除特别注明外）等知识产权归 China GC Team 或相应权利人所有。未经书面许可，不得擅自复制、传播或用于商业用途。</p>
+          <h3>5. 第三方链接</h3>
+          <p>本系统可能包含指向第三方平台（如 QQ、TruckersMP、YY）的链接。我们不对第三方网站的内容、隐私实践或服务条款负责，请您自行查阅相关条款。</p>
+          <h3>6. 免责声明</h3>
+          <p>本系统及车队服务按"现状"提供。我们尽力确保信息准确，但不对因使用本系统导致的任何直接或间接损失承担责任。车队活动参与存在固有风险，请成员自行评估。</p>
+          <h3>7. 条款变更</h3>
+          <p>我们保留随时修改本服务条款的权利。修改后的条款将在本页面发布，继续使用即视为接受更新后的条款。</p>
+          <h3>8. 适用法律</h3>
+          <p>本条款的解释与适用遵循车队运营地相关法律法规，不违反中华人民共和国法律及 GDPR 等适用的数据保护法规。</p>
+          <div class="policy-footer-note">China GC Team 保留对本服务条款的最终解释权。</div>
+        ` : `
+          <h3>1. Acceptance of Terms</h3>
+          <p>By accessing or using the China GongChi Team Parking Spot Selection System and related services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree, please stop using this system and team services.</p>
+          <h3>2. Service Description</h3>
+          <p>This system is a parking spot reservation platform for China GongChi Team activities, providing spot selection, occupation, and reversion functions to facilitate coordinated parking arrangements among participating teams.</p>
+          <h3>3. User Conduct</h3>
+          <ul>
+            <li>You agree to comply with TruckersMP platform rules, game publisher terms, and all team rules.</li>
+            <li>You may not use this system for any illegal, infringing, harassing, fraudulent, or network-disrupting activities.</li>
+            <li>You may not impersonate a team or maliciously occupy/revert others' spots to disrupt activities.</li>
+            <li>The team reserves the right to warn, restrict, or cancel spots of users who violate the rules.</li>
+          </ul>
+          <h3>4. Intellectual Property</h3>
+          <p>Intellectual property such as the logo, text, and images (unless otherwise noted) used on this system belongs to China GC Team or respective rights holders. Unauthorized reproduction, distribution, or commercial use is prohibited.</p>
+          <h3>5. Third-Party Links</h3>
+          <p>This system may contain links to third-party platforms (e.g., QQ, TruckersMP, YY). We are not responsible for the content, privacy practices, or terms of service of third-party websites. Please review their terms yourself.</p>
+          <h3>6. Disclaimer</h3>
+          <p>This system and team services are provided "as is." While we strive for accuracy, we are not liable for any direct or indirect losses resulting from the use of this system. Participation in team activities carries inherent risks; members should assess them independently.</p>
+          <h3>7. Changes to Terms</h3>
+          <p>We reserve the right to modify these Terms of Service at any time. Updated terms will be posted on this page. Continued use constitutes acceptance of the updated terms.</p>
+          <h3>8. Governing Law</h3>
+          <p>These terms shall be interpreted and applied in accordance with the laws of the team's operating location, without violating the laws of the People's Republic of China and applicable data protection regulations such as GDPR.</p>
+          <div class="policy-footer-note">China GC Team reserves the right of final interpretation of these Terms of Service.</div>
+        `
+      };
+    }
+    if (type === 'privacy') {
+      return {
+        title: I18N[lang].policy_privacy_title,
+        meta: I18N[lang].policy_privacy_meta,
+        body: lang === 'zh' ? `
+          <h3>1. 信息收集</h3>
+          <p>我们仅在您主动提供时收集个人信息，例如：</p>
+          <ul>
+            <li>车位预约时提交的车队名称、联系方式（QQ 号或手机号）。</li>
+            <li>通过 QQ 群或 YY 语音沟通时产生的必要联系信息。</li>
+            <li>您通过系统表单或邮件主动发送的信息。</li>
+          </ul>
+          <p>本系统不主动使用 Cookies 或类似跟踪技术收集个人身份信息，仅使用必要的本地存储实现基础功能（如记住您的车队信息）。</p>
+          <h3>2. 信息使用</h3>
+          <ul>
+            <li>审核车位预约、展示车位占用状态。</li>
+            <li>组织联运活动、发送活动通知。</li>
+            <li>维护系统秩序与安全，处理违规行为。</li>
+            <li>改进系统体验与车队服务质量。</li>
+          </ul>
+          <h3>3. 信息共享</h3>
+          <p>我们不会出售您的个人信息。仅在以下情况下可能共享：</p>
+          <ul>
+            <li>获得您的明确同意。</li>
+            <li>为完成车位预约或活动组织所必需，在车队内部公示车队名称。</li>
+            <li>法律法规要求或政府机关依法调取。</li>
+          </ul>
+          <h3>4. 数据安全</h3>
+          <p>我们采取合理措施保护您的个人信息，包括但不限于限制访问权限、使用安全通信渠道。但请注意，互联网传输无法保证绝对安全。</p>
+          <h3>5. 数据保留</h3>
+          <p>您的个人信息将在活动期间及之后合理期限内保留，或按法律要求保留。不再需要时，我们将安全删除或匿名化处理。</p>
+          <h3>6. 您的权利</h3>
+          <ul>
+            <li>查询、更正或删除您的个人信息（可通过撤回车位操作）。</li>
+            <li>撤回同意（不影响撤回前处理的合法性）。</li>
+            <li>反对或限制某些数据处理。</li>
+            <li>获取您的数据副本（数据可携带权）。</li>
+          </ul>
+          <p>如需行使权利，请通过车队接待群或 YY 频道联系我们。</p>
+          <h3>7. 儿童隐私</h3>
+          <p>本系统服务面向符合游戏年龄要求的用户。我们不会有意收集未满法定年龄儿童的个人信息。</p>
+          <h3>8. 政策更新</h3>
+          <p>本隐私政策可能不时更新。更新版本将在本页面发布，重大变更会通过车队渠道通知。</p>
+          <div class="policy-footer-note">China GC Team 致力于保护您的隐私，如有疑问请随时联系我们。</div>
+        ` : `
+          <h3>1. Information Collection</h3>
+          <p>We collect personal information only when you voluntarily provide it, such as:</p>
+          <ul>
+            <li>Team name and contact details (QQ number or phone) submitted for parking spot reservation.</li>
+            <li>Necessary contact information generated through QQ groups or YY voice communication.</li>
+            <li>Information you voluntarily send via system forms or email.</li>
+          </ul>
+          <p>This system does not actively use cookies or similar tracking technologies to collect personally identifiable information. Only necessary local storage is used for basic functionality (e.g., remembering your team info).</p>
+          <h3>2. How We Use Information</h3>
+          <ul>
+            <li>Reviewing parking reservations and displaying spot occupation status.</li>
+            <li>Organizing convoys and sending activity notifications.</li>
+            <li>Maintaining system order and security, handling violations.</li>
+            <li>Improving system experience and team service quality.</li>
+          </ul>
+          <h3>3. Information Sharing</h3>
+          <p>We do not sell your personal information. We may share it only in the following cases:</p>
+          <ul>
+            <li>With your explicit consent.</li>
+            <li>As necessary for parking reservation or event organization, displaying team name within the team.</li>
+            <li>As required by law or requested by government authorities.</li>
+          </ul>
+          <h3>4. Data Security</h3>
+          <p>We take reasonable measures to protect your personal information, including but not limited to restricting access and using secure communication channels. However, please note that internet transmission cannot be guaranteed to be absolutely secure.</p>
+          <h3>5. Data Retention</h3>
+          <p>Your personal information will be retained during the event and for a reasonable period thereafter, or as required by law. When no longer needed, we will securely delete or anonymize it.</p>
+          <h3>6. Your Rights</h3>
+          <ul>
+            <li>Access, correct, or delete your personal information (via spot reversion).</li>
+            <li>Withdraw consent (without affecting the lawfulness of processing before withdrawal).</li>
+            <li>Object to or restrict certain data processing.</li>
+            <li>Obtain a copy of your data (right to data portability).</li>
+          </ul>
+          <p>To exercise your rights, please contact us via the team QQ group or YY channel.</p>
+          <h3>7. Children's Privacy</h3>
+          <p>Our system services are intended for users who meet the game's age requirements. We do not knowingly collect personal information from children under the legal age.</p>
+          <h3>8. Policy Updates</h3>
+          <p>This Privacy Policy may be updated from time to time. Updated versions will be posted on this page, and significant changes will be notified through team channels.</p>
+          <div class="policy-footer-note">China GC Team is committed to protecting your privacy. Please contact us if you have any questions.</div>
+        `
+      };
+    }
+    return null;
+  }
+
+  function openPolicyModal(type) {
+    const data = getPolicyData(type);
+    if (!data) return;
+    document.getElementById('policyModalBody').innerHTML = `
+      <h2>${data.title}</h2>
+      <div class="policy-meta">${data.meta}</div>
+      ${data.body}
+    `;
+    document.getElementById('policyModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.querySelector('.policy-modal-content').scrollTop = 0;
+  }
+
+  function closePolicyModal() {
+    document.getElementById('policyModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('policyModal').addEventListener('click', function(e) {
+    if (e.target === this) closePolicyModal();
+  });
 
   /* =====================================================
      初始化
      ===================================================== */
   window.addEventListener('load', async () => {
+    renderFooter();
     await loadLatestEvent();
     subscribeChanges();
   });
@@ -940,6 +1460,7 @@
       closeModal('confirmModal');
       closeModal('revertAllModal');
       closeModal('revertOneModal');
+      closePolicyModal();
     }
   });
 
