@@ -89,6 +89,7 @@
     text-decoration: none;
     cursor: pointer;
     transition: transform 0.3s ease;
+    flex-shrink: 0;
   }
 
   nav .nav-logo:hover { transform: scale(1.05); }
@@ -104,6 +105,7 @@
     display: flex;
     list-style: none;
     gap: 8px;
+    align-items: center;
   }
 
   nav ul li a {
@@ -115,6 +117,7 @@
     transition: all 0.25s ease;
     cursor: pointer;
     position: relative;
+    white-space: nowrap;
   }
 
   nav ul li a::after {
@@ -134,6 +137,55 @@
   nav ul li a.active {
     color: var(--purple-300);
     background: rgba(124, 77, 255, 0.15);
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(124, 77, 255, 0.15);
+    border: 1px solid rgba(124, 77, 255, 0.35);
+    border-radius: 50px;
+    padding: 3px 5px;
+    transition: all 0.3s ease;
+  }
+
+  .lang-switch:hover {
+    border-color: var(--purple-400);
+    box-shadow: 0 0 16px rgba(124, 77, 255, 0.3);
+  }
+
+  .lang-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .lang-btn.active {
+    background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
+    color: #fff;
+    box-shadow: 0 2px 10px var(--purple-glow);
+  }
+
+  .lang-btn:hover:not(.active) {
+    color: var(--purple-300);
   }
 
   .menu-toggle {
@@ -649,7 +701,7 @@
 
   .contact-hero {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
 
@@ -661,7 +713,7 @@
     background: linear-gradient(145deg, #35205a, #241242);
     border: 1px solid rgba(157, 111, 255, 0.55);
     border-radius: 20px;
-    padding: 40px 32px;
+    padding: 36px 24px;
     text-align: center;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -675,13 +727,14 @@
     transform: translateY(-8px) scale(1.02);
   }
 
-  .contact-big-card > *:not(.qq-glow):not(.vtc-glow) {
+  .contact-big-card > *:not(.qq-glow):not(.vtc-glow):not(.yy-glow) {
     position: relative;
     z-index: 2;
   }
 
   .qq-glow,
-  .vtc-glow {
+  .vtc-glow,
+  .yy-glow {
     position: absolute;
     top: -50%; left: -50%;
     width: 200%; height: 200%;
@@ -699,11 +752,12 @@
   }
 
   .contact-big-card:hover .qq-glow,
-  .contact-big-card:hover .vtc-glow { opacity: 0.6; }
+  .contact-big-card:hover .vtc-glow,
+  .contact-big-card:hover .yy-glow { opacity: 0.6; }
 
   .card-icon {
-    font-size: 3.2rem;
-    margin-bottom: 18px;
+    font-size: 3rem;
+    margin-bottom: 16px;
     position: relative;
     z-index: 2;
     display: inline-block;
@@ -728,7 +782,7 @@
   }
 
   .contact-big-card h3 {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     color: var(--purple-200);
     margin-bottom: 10px;
     position: relative;
@@ -740,18 +794,19 @@
 
   .card-desc {
     color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-bottom: 24px;
+    font-size: 0.88rem;
+    margin-bottom: 22px;
     position: relative;
     z-index: 2;
   }
 
   .qq-stats,
-  .vtc-stats {
+  .vtc-stats,
+  .yy-stats {
     display: flex;
     justify-content: center;
-    gap: 40px;
-    margin-bottom: 28px;
+    gap: 30px;
+    margin-bottom: 24px;
     position: relative;
     z-index: 2;
   }
@@ -760,11 +815,12 @@
 
   .stat-num {
     display: block;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: var(--purple-300);
     margin-bottom: 4px;
     transition: color 0.3s ease;
+    word-break: break-all;
   }
 
   .contact-big-card:hover .stat-num {
@@ -773,7 +829,7 @@
   }
 
   .stat-label {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
   }
 
@@ -781,12 +837,12 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 36px;
+    padding: 12px 28px;
     border-radius: 50px;
     background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
     color: #fff;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     box-shadow: 0 4px 20px var(--purple-glow);
     transition: all 0.3s ease;
     position: relative;
@@ -815,12 +871,186 @@
 
   footer {
     text-align: center;
-    padding: 40px 24px;
+    padding: 40px 24px 32px;
     color: var(--text-muted);
     font-size: 0.85rem;
     border-top: 1px solid rgba(124, 77, 255, 0.15);
     position: relative;
     z-index: 1;
+    background: rgba(26, 11, 46, 0.7);
+    backdrop-filter: blur(4px);
+  }
+
+  .footer-compliance {
+    max-width: 900px;
+    margin: 0 auto 20px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 2;
+  }
+
+  .footer-compliance a {
+    color: var(--purple-300);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(196, 167, 255, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .footer-compliance a:hover {
+    color: var(--purple-200);
+    border-bottom-color: var(--purple-300);
+    text-shadow: 0 0 12px var(--purple-glow);
+  }
+
+  .footer-copy {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    opacity: 0.85;
+  }
+
+  /* 政策弹窗 */
+  .policy-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 5, 20, 0.88);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .policy-modal.open { display: flex; }
+
+  .policy-modal-content {
+    max-width: 800px;
+    width: 100%;
+    max-height: 85vh;
+    background: linear-gradient(145deg, #2a1747, #1a0b2e);
+    border: 1px solid rgba(124, 77, 255, 0.35);
+    border-radius: 20px;
+    padding: 36px 32px;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(124, 77, 255, 0.35);
+    position: relative;
+    animation: modalIn 0.35s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.94) translateY(16px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .policy-modal-content::-webkit-scrollbar {
+    width: 6px;
+  }
+  .policy-modal-content::-webkit-scrollbar-track {
+    background: rgba(124, 77, 255, 0.06);
+    border-radius: 3px;
+  }
+  .policy-modal-content::-webkit-scrollbar-thumb {
+    background: rgba(124, 77, 255, 0.35);
+    border-radius: 3px;
+  }
+  .policy-modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(124, 77, 255, 0.6);
+  }
+
+  .policy-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: rgba(124, 77, 255, 0.2);
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    color: var(--purple-300);
+    font-size: 1.4rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-family: inherit;
+  }
+
+  .policy-modal-close:hover {
+    background: var(--purple-500);
+    color: #fff;
+    transform: rotate(90deg);
+    box-shadow: 0 0 24px var(--purple-glow);
+  }
+
+  .policy-modal-content h2 {
+    font-size: 1.5rem;
+    color: var(--purple-300);
+    margin-bottom: 6px;
+    padding-right: 48px;
+  }
+
+  .policy-modal-content .policy-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(124, 77, 255, 0.15);
+    letter-spacing: 0.5px;
+  }
+
+  .policy-modal-content h3 {
+    font-size: 1.05rem;
+    color: var(--purple-200);
+    margin: 22px 0 8px;
+  }
+
+  .policy-modal-content h3:first-of-type {
+    margin-top: 0;
+  }
+
+  .policy-modal-content p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    line-height: 1.9;
+  }
+
+  .policy-modal-content ul {
+    list-style: none;
+    padding-left: 4px;
+    margin-bottom: 12px;
+  }
+
+  .policy-modal-content ul li {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    padding: 4px 0 4px 20px;
+    position: relative;
+    line-height: 1.8;
+  }
+
+  .policy-modal-content ul li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--purple-500);
+    font-size: 0.6rem;
+    top: 9px;
+  }
+
+  .policy-modal-content .policy-footer-note {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(124, 77, 255, 0.15);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+    font-style: italic;
   }
 
   .lightbox {
@@ -891,6 +1121,15 @@
     box-shadow: 0 8px 30px var(--purple-glow);
   }
 
+  @media (max-width: 900px) {
+    .contact-hero {
+      grid-template-columns: 1fr 1fr;
+    }
+    .contact-big-card:last-child {
+      grid-column: span 2;
+    }
+  }
+
   @media (max-width: 768px) {
     nav ul {
       position: fixed;
@@ -902,6 +1141,7 @@
       transform: translateY(-120%);
       transition: transform 0.3s ease;
       border-bottom: 1px solid rgba(124, 77, 255, 0.2);
+      align-items: stretch;
     }
 
     nav ul.open { transform: translateY(0); }
@@ -918,8 +1158,10 @@
     .section-title { font-size: 1.4rem; }
 
     .contact-hero { grid-template-columns: 1fr; }
+    .contact-big-card:last-child { grid-column: span 1; }
     .qq-stats,
-    .vtc-stats { gap: 28px; }
+    .vtc-stats,
+    .yy-stats { gap: 28px; }
     .contact-big-card { padding: 32px 24px; }
     .card-icon { font-size: 2.6rem; }
 
@@ -927,6 +1169,14 @@
     .carousel-btn { width: 38px; height: 38px; font-size: 1.4rem; }
 
     .back-top { bottom: 20px; right: 20px; width: 42px; height: 42px; }
+
+    .policy-modal-content {
+      padding: 28px 20px;
+    }
+
+    .policy-modal-content h2 {
+      font-size: 1.25rem;
+    }
   }
 </style>
 </head>
@@ -943,89 +1193,99 @@
     </a>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
     <ul id="navMenu">
-      <li><a onclick="scrollToSection('home')" class="nav-link active">主页</a></li>
-      <li><a onclick="scrollToSection('intro')" class="nav-link">车队介绍</a></li>
-      <li><a onclick="scrollToSection('rules')" class="nav-link">规则要求</a></li>
-      <li><a onclick="scrollToSection('gallery')" class="nav-link">车队画展</a></li>
-      <li><a onclick="scrollToSection('staff')" class="nav-link">管理人员</a></li>
-      <li><a onclick="scrollToSection('contact')" class="nav-link">联系我们</a></li>
+      <li><a onclick="scrollToSection('home')" class="nav-link active" data-i18n="nav_home">主页</a></li>
+      <li><a onclick="scrollToSection('intro')" class="nav-link" data-i18n="nav_intro">车队介绍</a></li>
+      <li><a onclick="scrollToSection('rules')" class="nav-link" data-i18n="nav_rules">规则要求</a></li>
+      <li><a onclick="scrollToSection('gallery')" class="nav-link" data-i18n="nav_gallery">车队画展</a></li>
+      <li><a onclick="scrollToSection('staff')" class="nav-link" data-i18n="nav_staff">管理人员</a></li>
+      <li><a onclick="scrollToSection('contact')" class="nav-link" data-i18n="nav_contact">联系我们</a></li>
     </ul>
+    <div class="nav-right">
+      <div class="lang-switch">
+        <button class="lang-btn active" id="btnZh" onclick="setLanguage('zh')">中文</button>
+        <button class="lang-btn" id="btnEn" onclick="setLanguage('en')">EN</button>
+      </div>
+    </div>
   </div>
 </nav>
 
 <section id="home" class="visible">
   <img src="images/logo.png" alt="China GC Team Logo" class="hero-logo"
        onerror="this.style.display='none'">
-  <h1>中国共驰车队</h1>
-  <p class="slogan">行则不散，进则不乱，同向而行，共速而驰</p>
-  <p class="slogan-en">March united, advance orderly, move side-by-side, race in unison</p>
+  <h1 data-i18n="hero_title">中国共驰车队</h1>
+  <p class="slogan" data-i18n="hero_slogan">行则不散，进则不乱，同向而行，共速而驰</p>
+  <p class="slogan-en" data-i18n="hero_slogan_en">March united, advance orderly, move side-by-side, race in unison</p>
   <div class="hero-btns">
-    <a href="https://truckersmp.com/vtc/86009" target="_blank" rel="noopener" class="btn btn-primary">
+    <a href="https://truckersmp.com/vtc/86009" target="_blank" rel="noopener" class="btn btn-primary" data-i18n="hero_btn_vtc">
       访问 VTC 主页
     </a>
-    <a href="https://qm.qq.com/q/s5Fyq72Jos" target="_blank" rel="noopener" class="btn btn-outline">
+    <a href="https://qm.qq.com/q/s5Fyq72Jos" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="hero_btn_qq">
       加入 QQ 接待群
+    </a>
+    <a href="https://z.yy.com/mVKSCtyGZX40" target="_blank" rel="noopener" class="btn btn-outline" data-i18n="hero_btn_yy">
+      进入 YY 频道
     </a>
   </div>
 </section>
 
 <section id="intro">
-  <h2 class="section-title">车队介绍</h2>
-  <p class="section-sub">ABOUT TEAM</p>
+  <h2 class="section-title" data-i18n="intro_title">车队介绍</h2>
+  <p class="section-sub" data-i18n="intro_sub">ABOUT TEAM</p>
   <div class="intro-grid">
     <div class="card intro-text">
-      <span class="highlight">中国共驰车队 / China GongChi Team</span>
-      <p>中国共驰车队，成立于 2026 年 1 月 11 日，是一支以秩序、协同与执行为核心构建的虚拟运输团队。</p>
-      <p>车队注重统一调度、稳定运行与长期发展，不以短期热度为方向，不以人数规模为标准，而以整体质量、团队配合与持续执行作为运行基础。</p>
-      <p>“共驰”，寓意同路者并肩，同行者同速。其意承自古人车马并驱之象——千里之途，非一骑可达；同向列阵，方能共序而行。</p>
+      <span class="highlight" data-i18n="intro_highlight">中国共驰车队 / China GongChi Team</span>
+      <p data-i18n="intro_p1">中国共驰车队，成立于 2026 年 1 月 11 日，是一支以秩序、协同与执行为核心构建的虚拟运输团队。</p>
+      <p data-i18n="intro_p2">车队注重统一调度、稳定运行与长期发展，不以短期热度为方向，不以人数规模为标准，而以整体质量、团队配合与持续执行作为运行基础。</p>
+      <p data-i18n="intro_p3">“共驰”，寓意同路者并肩，同行者同速。其意承自古人车马并驱之象——千里之途，非一骑可达；同向列阵，方能共序而行。</p>
     </div>
     <div class="card">
       <table class="info-table">
-        <tr><td>车队名称</td><td>中国共驰车队</td></tr>
-        <tr><td>英文名称</td><td>China GongChi Team</td></tr>
-        <tr><td>成立时间</td><td>2026 年 1 月 11 日</td></tr>
-        <tr><td>VTC 标签</td><td>CN | GC-Team</td></tr>
-        <tr><td>创始人</td><td>GC-CEO-PoXiao</td></tr>
-        <tr><td>成员人数</td><td id="vtcMemberInline">100 人</td></tr>
-        <tr><td>招募状态</td><td>开放中</td></tr>
-        <tr><td>支持游戏</td><td>Euro Truck Simulator 2</td></tr>
+        <tr><td data-i18n="info_name">车队名称</td><td data-i18n="info_name_v">中国共驰车队</td></tr>
+        <tr><td data-i18n="info_en">英文名称</td><td>China GongChi Team</td></tr>
+        <tr><td data-i18n="info_founded">成立时间</td><td data-i18n="info_founded_v">2026 年 1 月 11 日</td></tr>
+        <tr><td data-i18n="info_tag">VTC 标签</td><td>CN | GC-Team</td></tr>
+        <tr><td data-i18n="info_founder">创始人</td><td>GC-CEO-PoXiao</td></tr>
+        <tr><td data-i18n="info_members">成员人数</td><td id="vtcMemberInline">100 人</td></tr>
+        <tr><td data-i18n="info_recruit">招募状态</td><td data-i18n="info_recruit_v">开放中</td></tr>
+        <tr><td data-i18n="info_game">支持游戏</td><td>Euro Truck Simulator 2</td></tr>
+        <tr><td data-i18n="info_yy">YY 频道</td><td data-i18n="info_yy_v">819095</td></tr>
       </table>
     </div>
   </div>
 </section>
 
 <section id="rules">
-  <h2 class="section-title">规则要求</h2>
-  <p class="section-sub">RULES & REQUIREMENTS</p>
+  <h2 class="section-title" data-i18n="rules_title">规则要求</h2>
+  <p class="section-sub" data-i18n="rules_sub">RULES &amp; REQUIREMENTS</p>
   <div class="rules-tabs">
-    <button class="tab-btn active" onclick="switchTab(0, this)">车队规则</button>
-    <button class="tab-btn" onclick="switchTab(1, this)">加入要求</button>
+    <button class="tab-btn active" onclick="switchTab(0, this)" data-i18n="tab_team_rules">车队规则</button>
+    <button class="tab-btn" onclick="switchTab(1, this)" data-i18n="tab_join_req">加入要求</button>
   </div>
   <div class="tab-panel active" data-panel="0">
     <div class="rule-grid">
-      <div class="card rule-item"><h4>基础规范</h4><p>遵守 TruckersMP 平台规则及车队管理要求，保持良好游戏行为与团队秩序。</p></div>
-      <div class="card rule-item"><h4>活动纪律</h4><p>联运或车队活动期间服从统一指挥，不得擅自脱队、超车、逆行或破坏队形。</p></div>
-      <div class="card rule-item"><h4>语音要求</h4><p>活动期间进入指定 YY 频道，确保沟通顺畅、指令明确、执行及时。</p></div>
-      <div class="card rule-item"><h4>形象要求</h4><p>使用规范昵称及统一标识，维持车队整体对外展示效果。</p></div>
-      <div class="card rule-item"><h4>行为要求</h4><p>禁止辱骂、挑衅、恶意碰撞及扰乱活动秩序等行为。</p></div>
-      <div class="card rule-item"><h4>团队氛围</h4><p>尊重管理、尊重队友、尊重活动安排，以配合与纪律维护团队环境。</p></div>
+      <div class="card rule-item"><h4 data-i18n="rule_basic_t">基础规范</h4><p data-i18n="rule_basic_d">遵守 TruckersMP 平台规则及车队管理要求，保持良好游戏行为与团队秩序。</p></div>
+      <div class="card rule-item"><h4 data-i18n="rule_activity_t">活动纪律</h4><p data-i18n="rule_activity_d">联运或车队活动期间服从统一指挥，不得擅自脱队、超车、逆行或破坏队形。</p></div>
+      <div class="card rule-item"><h4 data-i18n="rule_voice_t">语音要求</h4><p data-i18n="rule_voice_d">活动期间进入指定 YY 频道 819095，确保沟通顺畅、指令明确、执行及时。</p></div>
+      <div class="card rule-item"><h4 data-i18n="rule_image_t">形象要求</h4><p data-i18n="rule_image_d">使用规范昵称及统一标识，维持车队整体对外展示效果。</p></div>
+      <div class="card rule-item"><h4 data-i18n="rule_behavior_t">行为要求</h4><p data-i18n="rule_behavior_d">禁止辱骂、挑衅、恶意碰撞及扰乱活动秩序等行为。</p></div>
+      <div class="card rule-item"><h4 data-i18n="rule_atmos_t">团队氛围</h4><p data-i18n="rule_atmos_d">尊重管理、尊重队友、尊重活动安排，以配合与纪律维护团队环境。</p></div>
     </div>
   </div>
   <div class="tab-panel" data-panel="1">
     <div class="rule-grid">
-      <div class="card rule-item"><h4>基础条件</h4><p>拥有正版 ETS2 游戏本体，并具备正常使用 TruckersMP 的条件。</p></div>
-      <div class="card rule-item"><h4>时间要求</h4><p>具备一定在线时间，能够参与车队日常活动、联运安排及相关集体行动。</p></div>
-      <div class="card rule-item"><h4>设备要求</h4><p>拥有基础语音设备，能够正常使用 YY 进行语音沟通与活动配合。</p></div>
-      <div class="card rule-item"><h4>态度要求</h4><p>具备团队意识，服从管理，保持稳定、积极、认真的参与态度。</p></div>
-      <div class="card rule-item"><h4>形象要求</h4><p>愿意维护车队整体对外形象，遵守车队规范，不做影响团队声誉之行为。</p></div>
-      <div class="card rule-item"><h4>加入方式</h4><p>通过车队接待群 825532223 /YY 819095 提交申请，经审核通过后加入车队。</p></div>
+      <div class="card rule-item"><h4 data-i18n="join_basic_t">基础条件</h4><p data-i18n="join_basic_d">拥有正版 ETS2 游戏本体，并具备正常使用 TruckersMP 的条件。</p></div>
+      <div class="card rule-item"><h4 data-i18n="join_time_t">时间要求</h4><p data-i18n="join_time_d">具备一定在线时间，能够参与车队日常活动、联运安排及相关集体行动。</p></div>
+      <div class="card rule-item"><h4 data-i18n="join_device_t">设备要求</h4><p data-i18n="join_device_d">拥有基础语音设备，能够正常使用 YY 频道 819095 进行语音沟通与活动配合。</p></div>
+      <div class="card rule-item"><h4 data-i18n="join_attitude_t">态度要求</h4><p data-i18n="join_attitude_d">具备团队意识，服从管理，保持稳定、积极、认真的参与态度。</p></div>
+      <div class="card rule-item"><h4 data-i18n="join_image_t">形象要求</h4><p data-i18n="join_image_d">愿意维护车队整体对外形象，遵守车队规范，不做影响团队声誉之行为。</p></div>
+      <div class="card rule-item"><h4 data-i18n="join_way_t">加入方式</h4><p data-i18n="join_way_d">通过车队接待群 825532223 / YY 频道 819095 提交申请，经审核通过后加入车队。</p></div>
     </div>
   </div>
 </section>
 
 <section id="gallery">
-  <h2 class="section-title">车队画展</h2>
-  <p class="section-sub">TEAM GALLERY</p>
+  <h2 class="section-title" data-i18n="gallery_title">车队画展</h2>
+  <p class="section-sub" data-i18n="gallery_sub">TEAM GALLERY</p>
 
   <div class="gallery-carousel">
     <div class="carousel-track" id="carouselTrack">
@@ -1055,103 +1315,122 @@
     <div class="gallery-item" onclick="openLightbox(this)">
       <img src="images/gallery/5.jpg" alt="车队活动 1"
            onerror="this.outerHTML='<div class=\'placeholder-hint\'><span class=\'icon\'>🖼</span><span>待上传</span></div>'">
-      <div class="overlay">车队活动 1</div>
+      <div class="overlay" data-i18n="gallery_item1">车队活动 1</div>
     </div>
     <div class="gallery-item" onclick="openLightbox(this)">
       <img src="images/gallery/6.jpg" alt="车队活动 2"
            onerror="this.outerHTML='<div class=\'placeholder-hint\'><span class=\'icon\'>🖼</span><span>待上传</span></div>'">
-      <div class="overlay">车队活动 2</div>
+      <div class="overlay" data-i18n="gallery_item2">车队活动 2</div>
     </div>
     <div class="gallery-item" onclick="openLightbox(this)">
       <img src="images/gallery/7.jpg" alt="车队活动 3"
            onerror="this.outerHTML='<div class=\'placeholder-hint\'><span class=\'icon\'>🖼</span><span>待上传</span></div>'">
-      <div class="overlay">车队活动 3</div>
+      <div class="overlay" data-i18n="gallery_item3">车队活动 3</div>
     </div>
     <div class="gallery-item" onclick="openLightbox(this)">
       <img src="images/gallery/8.jpg" alt="车队活动 4"
            onerror="this.outerHTML='<div class=\'placeholder-hint\'><span class=\'icon\'>🖼</span><span>待上传</span></div>'">
-      <div class="overlay">车队活动 4</div>
+      <div class="overlay" data-i18n="gallery_item4">车队活动 4</div>
     </div>
     <div class="gallery-item" onclick="openLightbox(this)">
       <img src="images/gallery/9.jpg" alt="车队活动 5"
            onerror="this.outerHTML='<div class=\'placeholder-hint\'><span class=\'icon\'>🖼</span><span>待上传</span></div>'">
-      <div class="overlay">车队活动 5</div>
+      <div class="overlay" data-i18n="gallery_item5">车队活动 5</div>
     </div>
     <div class="gallery-item" onclick="openLightbox(this)">
       <img src="images/gallery/10.jpg" alt="车队活动 6"
            onerror="this.outerHTML='<div class=\'placeholder-hint\'><span class=\'icon\'>🖼</span><span>待上传</span></div>'">
-      <div class="overlay">车队活动 6</div>
+      <div class="overlay" data-i18n="gallery_item6">车队活动 6</div>
     </div>
   </div>
 </section>
 
 <section id="staff">
-  <h2 class="section-title">管理人员</h2>
-  <p class="section-sub">TEAM STAFF</p>
+  <h2 class="section-title" data-i18n="staff_title">管理人员</h2>
+  <p class="section-sub" data-i18n="staff_sub">TEAM STAFF</p>
   <div class="staff-grid">
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/poxiao.jpg" alt="破晓" onerror="this.parentElement.textContent='破'"></div>
-      <div class="staff-name">破晓</div><div class="staff-role">创始人</div>
+      <div class="staff-name" data-i18n="staff_1_name">破晓</div><div class="staff-role" data-i18n="staff_1_role">创始人</div>
     </div>
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/wanqing.jpg" alt="晚晴" onerror="this.parentElement.textContent='晚'"></div>
-      <div class="staff-name">晚晴</div><div class="staff-role">联合创始人</div>
+      <div class="staff-name" data-i18n="staff_2_name">晚晴</div><div class="staff-role" data-i18n="staff_2_role">联合创始人</div>
     </div>
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/haitang.jpg" alt="海棠" onerror="this.parentElement.textContent='海'"></div>
-      <div class="staff-name">海棠</div><div class="staff-role">联合创始人</div>
+      <div class="staff-name" data-i18n="staff_3_name">海棠</div><div class="staff-role" data-i18n="staff_3_role">联合创始人</div>
     </div>
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/maolv.jpg" alt="毛驴" onerror="this.parentElement.textContent='毛'"></div>
-      <div class="staff-name">毛驴</div><div class="staff-role">行政经理</div>
+      <div class="staff-name" data-i18n="staff_4_name">毛驴</div><div class="staff-role" data-i18n="staff_4_role">行政经理</div>
     </div>
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/qianyi.jpg" alt="浅忆" onerror="this.parentElement.textContent='浅'"></div>
-      <div class="staff-name">浅忆</div><div class="staff-role">车队副队</div>
+      <div class="staff-name" data-i18n="staff_5_name">浅忆</div><div class="staff-role" data-i18n="staff_5_role">车队副队</div>
     </div>
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/beimu.jpg" alt="北慕" onerror="this.parentElement.textContent='北'"></div>
-      <div class="staff-name">北慕</div><div class="staff-role">车队副队</div>
+      <div class="staff-name" data-i18n="staff_6_name">北慕</div><div class="staff-role" data-i18n="staff_6_role">车队副队</div>
     </div>
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/mingri.jpg" alt="明日" onerror="this.parentElement.textContent='明'"></div>
-      <div class="staff-name">明日</div><div class="staff-role">副队+活动经理</div>
+      <div class="staff-name" data-i18n="staff_7_name">明日</div><div class="staff-role" data-i18n="staff_7_role">副队+活动经理</div>
     </div>
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/xiaoqi.jpg" alt="小七" onerror="this.parentElement.textContent='七'"></div>
-      <div class="staff-name">小七</div><div class="staff-role">车队高管</div>
+      <div class="staff-name" data-i18n="staff_8_name">小七</div><div class="staff-role" data-i18n="staff_8_role">车队高管</div>
     </div>
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/xingxing.jpg" alt="星星" onerror="this.parentElement.textContent='星'"></div>
-      <div class="staff-name">星星</div><div class="staff-role">人事主管</div>
+      <div class="staff-name" data-i18n="staff_9_name">星星</div><div class="staff-role" data-i18n="staff_9_role">人事主管</div>
     </div>
     <div class="staff-card">
       <div class="staff-avatar"><img src="images/staff/yuyu.jpg" alt="鱼鱼" onerror="this.parentElement.textContent='鱼'"></div>
-      <div class="staff-name">鱼鱼</div><div class="staff-role">联运主管</div>
+      <div class="staff-name" data-i18n="staff_10_name">鱼鱼</div><div class="staff-role" data-i18n="staff_10_role">联运主管</div>
     </div>
   </div>
 </section>
 
 <section id="contact">
-  <h2 class="section-title">联系我们</h2>
-  <p class="section-sub">CONTACT US</p>
+  <h2 class="section-title" data-i18n="contact_title">联系我们</h2>
+  <p class="section-sub" data-i18n="contact_sub">CONTACT US</p>
 
   <div class="contact-hero">
     <a href="https://qm.qq.com/q/s5Fyq72Jos" target="_blank" rel="noopener" class="contact-big-card qq-card">
       <div class="qq-glow"></div>
       <div class="card-icon">💬</div>
-      <h3>QQ 交流接待群</h3>
-      <p class="card-desc">欧洲卡车模拟2【中国共驰车队】TMP 官方接待群</p>
+      <h3 data-i18n="contact_qq_title">QQ 交流接待群</h3>
+      <p class="card-desc" data-i18n="contact_qq_desc">欧洲卡车模拟2【中国共驰车队】TMP 官方接待群</p>
 
       <div class="qq-stats">
         <div class="stat">
           <span class="stat-num" id="qqGroupNum">825532223</span>
-          <span class="stat-label">群号</span>
+          <span class="stat-label" data-i18n="contact_qq_label">群号</span>
         </div>
       </div>
 
       <div class="card-btn">
-        <span>一键加入 QQ 群</span>
+        <span data-i18n="contact_qq_btn">一键加入 QQ 群</span>
+        <span class="card-btn-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="https://z.yy.com/mVKSCtyGZX40" target="_blank" rel="noopener" class="contact-big-card yy-card">
+      <div class="yy-glow"></div>
+      <div class="card-icon">🎙️</div>
+      <h3 data-i18n="contact_yy_title">YY 语音频道</h3>
+      <p class="card-desc" data-i18n="contact_yy_desc">活动期间语音沟通 · 联运调度指挥</p>
+
+      <div class="yy-stats">
+        <div class="stat">
+          <span class="stat-num" id="yyChannelNum">819095</span>
+          <span class="stat-label" data-i18n="contact_yy_label">频道号</span>
+        </div>
+      </div>
+
+      <div class="card-btn">
+        <span data-i18n="contact_yy_btn">进入 YY 频道</span>
         <span class="card-btn-arrow">→</span>
       </div>
     </a>
@@ -1159,8 +1438,8 @@
     <a href="https://truckersmp.com/vtc/86009" target="_blank" rel="noopener" class="contact-big-card vtc-card">
       <div class="vtc-glow"></div>
       <div class="card-icon">🚛</div>
-      <h3>TruckersMP VTC</h3>
-      <p class="card-desc">查看车队档案、成员名单与详细信息</p>
+      <h3 data-i18n="contact_vtc_title">TruckersMP VTC</h3>
+      <p class="card-desc" data-i18n="contact_vtc_desc">查看车队档案、成员名单与详细信息</p>
 
       <div class="vtc-stats">
         <div class="stat">
@@ -1169,12 +1448,12 @@
         </div>
         <div class="stat">
           <span class="stat-num" id="vtcMemberCount">100</span>
-          <span class="stat-label">成员</span>
+          <span class="stat-label" data-i18n="contact_vtc_members">成员</span>
         </div>
       </div>
 
       <div class="card-btn">
-        <span>访问 VTC 主页</span>
+        <span data-i18n="contact_vtc_btn">访问 VTC 主页</span>
         <span class="card-btn-arrow">→</span>
       </div>
     </a>
@@ -1182,8 +1461,21 @@
 </section>
 
 <footer>
-  © 2026 China GC Team 共驰车队 · All final interpretation rights belong to GC Team
+  <div class="footer-compliance" data-i18n-html="footer_compliance">
+    车队遵循 <a onclick="openPolicyModal('gdpr')">GDPR</a> 相关规范，并遵守 <a onclick="openPolicyModal('tos')">服务条款</a> 与 <a onclick="openPolicyModal('privacy')">隐私政策</a>。
+  </div>
+
+  <div class="footer-copy" data-i18n="footer_copy">
+    © 2026 China GC Team 共驰车队 · All final interpretation rights belong to GC Team
+  </div>
 </footer>
+
+<div class="policy-modal" id="policyModal">
+  <div class="policy-modal-content" id="policyModalContent">
+    <button class="policy-modal-close" onclick="closePolicyModal()">×</button>
+    <div id="policyModalBody"></div>
+  </div>
+</div>
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">×</button>
@@ -1193,17 +1485,471 @@
 <button class="back-top" id="backTop" onclick="scrollToSection('home')">↑</button>
 
 <script>
+  /* ========== 国际化 ========== */
+  const I18N = {
+    zh: {
+      nav_home: '主页',
+      nav_intro: '车队介绍',
+      nav_rules: '规则要求',
+      nav_gallery: '车队画展',
+      nav_staff: '管理人员',
+      nav_contact: '联系我们',
+      hero_title: '中国共驰车队',
+      hero_slogan: '行则不散，进则不乱，同向而行，共速而驰',
+      hero_slogan_en: 'March united, advance orderly, move side-by-side, race in unison',
+      hero_btn_vtc: '访问 VTC 主页',
+      hero_btn_qq: '加入 QQ 接待群',
+      hero_btn_yy: '进入 YY 频道',
+      intro_title: '车队介绍',
+      intro_sub: 'ABOUT TEAM',
+      intro_highlight: '中国共驰车队 / China GongChi Team',
+      intro_p1: '中国共驰车队，成立于 2026 年 1 月 11 日，是一支以秩序、协同与执行为核心构建的虚拟运输团队。',
+      intro_p2: '车队注重统一调度、稳定运行与长期发展，不以短期热度为方向，不以人数规模为标准，而以整体质量、团队配合与持续执行作为运行基础。',
+      intro_p3: '“共驰”，寓意同路者并肩，同行者同速。其意承自古人车马并驱之象——千里之途，非一骑可达；同向列阵，方能共序而行。',
+      info_name: '车队名称',
+      info_name_v: '中国共驰车队',
+      info_en: '英文名称',
+      info_founded: '成立时间',
+      info_founded_v: '2026 年 1 月 11 日',
+      info_tag: 'VTC 标签',
+      info_founder: '创始人',
+      info_members: '成员人数',
+      info_recruit: '招募状态',
+      info_recruit_v: '开放中',
+      info_game: '支持游戏',
+      info_yy: 'YY 频道',
+      info_yy_v: '819095',
+      rules_title: '规则要求',
+      rules_sub: 'RULES & REQUIREMENTS',
+      tab_team_rules: '车队规则',
+      tab_join_req: '加入要求',
+      rule_basic_t: '基础规范', rule_basic_d: '遵守 TruckersMP 平台规则及车队管理要求，保持良好游戏行为与团队秩序。',
+      rule_activity_t: '活动纪律', rule_activity_d: '联运或车队活动期间服从统一指挥，不得擅自脱队、超车、逆行或破坏队形。',
+      rule_voice_t: '语音要求', rule_voice_d: '活动期间进入指定 YY 频道 819095，确保沟通顺畅、指令明确、执行及时。',
+      rule_image_t: '形象要求', rule_image_d: '使用规范昵称及统一标识，维持车队整体对外展示效果。',
+      rule_behavior_t: '行为要求', rule_behavior_d: '禁止辱骂、挑衅、恶意碰撞及扰乱活动秩序等行为。',
+      rule_atmos_t: '团队氛围', rule_atmos_d: '尊重管理、尊重队友、尊重活动安排，以配合与纪律维护团队环境。',
+      join_basic_t: '基础条件', join_basic_d: '拥有正版 ETS2 游戏本体，并具备正常使用 TruckersMP 的条件。',
+      join_time_t: '时间要求', join_time_d: '具备一定在线时间，能够参与车队日常活动、联运安排及相关集体行动。',
+      join_device_t: '设备要求', join_device_d: '拥有基础语音设备，能够正常使用 YY 频道 819095 进行语音沟通与活动配合。',
+      join_attitude_t: '态度要求', join_attitude_d: '具备团队意识，服从管理，保持稳定、积极、认真的参与态度。',
+      join_image_t: '形象要求', join_image_d: '愿意维护车队整体对外形象，遵守车队规范，不做影响团队声誉之行为。',
+      join_way_t: '加入方式', join_way_d: '通过车队接待群 825532223 / YY 频道 819095 提交申请，经审核通过后加入车队。',
+      gallery_title: '车队画展',
+      gallery_sub: 'TEAM GALLERY',
+      gallery_item1: '车队活动 1', gallery_item2: '车队活动 2', gallery_item3: '车队活动 3',
+      gallery_item4: '车队活动 4', gallery_item5: '车队活动 5', gallery_item6: '车队活动 6',
+      staff_title: '管理人员',
+      staff_sub: 'TEAM STAFF',
+      staff_1_name: '破晓', staff_1_role: '创始人',
+      staff_2_name: '晚晴', staff_2_role: '联合创始人',
+      staff_3_name: '海棠', staff_3_role: '联合创始人',
+      staff_4_name: '毛驴', staff_4_role: '行政经理',
+      staff_5_name: '浅忆', staff_5_role: '车队副队',
+      staff_6_name: '北慕', staff_6_role: '车队副队',
+      staff_7_name: '明日', staff_7_role: '副队+活动经理',
+      staff_8_name: '小七', staff_8_role: '车队高管',
+      staff_9_name: '星星', staff_9_role: '人事主管',
+      staff_10_name: '鱼鱼', staff_10_role: '联运主管',
+      contact_title: '联系我们',
+      contact_sub: 'CONTACT US',
+      contact_qq_title: 'QQ 交流接待群',
+      contact_qq_desc: '欧洲卡车模拟2【中国共驰车队】TMP 官方接待群',
+      contact_qq_label: '群号',
+      contact_qq_btn: '一键加入 QQ 群',
+      contact_yy_title: 'YY 语音频道',
+      contact_yy_desc: '活动期间语音沟通 · 联运调度指挥',
+      contact_yy_label: '频道号',
+      contact_yy_btn: '进入 YY 频道',
+      contact_vtc_title: 'TruckersMP VTC',
+      contact_vtc_desc: '查看车队档案、成员名单与详细信息',
+      contact_vtc_members: '成员',
+      contact_vtc_btn: '访问 VTC 主页',
+      footer_compliance: '车队遵循 <a onclick="openPolicyModal(\'gdpr\')">GDPR</a> 相关规范，并遵守 <a onclick="openPolicyModal(\'tos\')">服务条款</a> 与 <a onclick="openPolicyModal(\'privacy\')">隐私政策</a>。',
+      footer_copy: '© 2026 China GC Team 共驰车队 · All final interpretation rights belong to GC Team',
+      policy_gdpr_title: 'GDPR 合规声明',
+      policy_gdpr_meta: '通用数据保护条例（General Data Protection Regulation）· 最后更新：2026 年 1 月',
+      policy_tos_title: '服务条款',
+      policy_tos_meta: 'Terms of Service · 最后更新：2026 年 1 月',
+      policy_privacy_title: '隐私政策',
+      policy_privacy_meta: 'Privacy Policy · 最后更新：2026 年 1 月'
+    },
+    en: {
+      nav_home: 'Home',
+      nav_intro: 'About',
+      nav_rules: 'Rules',
+      nav_gallery: 'Gallery',
+      nav_staff: 'Staff',
+      nav_contact: 'Contact',
+      hero_title: 'China GongChi Team',
+      hero_slogan: 'March united, advance orderly, move side-by-side, race in unison',
+      hero_slogan_en: '行则不散，进则不乱，同向而行，共速而驰',
+      hero_btn_vtc: 'Visit VTC Page',
+      hero_btn_qq: 'Join QQ Group',
+      hero_btn_yy: 'Join YY Channel',
+      intro_title: 'About Team',
+      intro_sub: 'ABOUT TEAM',
+      intro_highlight: 'China GongChi Team',
+      intro_p1: 'China GongChi Team, founded on January 11, 2026, is a virtual transport team built around order, coordination, and execution.',
+      intro_p2: 'The team focuses on unified dispatch, stable operation, and long-term development. We do not chase short-term popularity or judge by member count, but rather base our operations on overall quality, teamwork, and consistent execution.',
+      intro_p3: '"GongChi" symbolizes walking side by side and moving at the same pace. It inherits the ancient imagery of chariots driving in unison — a thousand-mile journey cannot be completed by a single rider; only by marching in the same direction can we advance together in order.',
+      info_name: 'Team Name',
+      info_name_v: 'China GongChi Team',
+      info_en: 'English Name',
+      info_founded: 'Founded',
+      info_founded_v: 'January 11, 2026',
+      info_tag: 'VTC Tag',
+      info_founder: 'Founder',
+      info_members: 'Members',
+      info_recruit: 'Recruitment',
+      info_recruit_v: 'Open',
+      info_game: 'Supported Game',
+      info_yy: 'YY Channel',
+      info_yy_v: '819095',
+      rules_title: 'Rules & Requirements',
+      rules_sub: 'RULES & REQUIREMENTS',
+      tab_team_rules: 'Team Rules',
+      tab_join_req: 'Join Requirements',
+      rule_basic_t: 'Basic Rules', rule_basic_d: 'Comply with TruckersMP platform rules and team management requirements. Maintain good game behavior and team order.',
+      rule_activity_t: 'Activity Discipline', rule_activity_d: 'During convoys or team activities, follow unified command. Do not leave the formation, overtake, drive in reverse, or disrupt the convoy.',
+      rule_voice_t: 'Voice Requirements', rule_voice_d: 'Join the designated YY channel 819095 during activities to ensure smooth communication and timely execution.',
+      rule_image_t: 'Image Requirements', rule_image_d: 'Use standard nicknames and unified identifiers to maintain the team\'s overall public image.',
+      rule_behavior_t: 'Behavior Requirements', rule_behavior_d: 'Insults, provocation, malicious collisions, and disrupting activity order are prohibited.',
+      rule_atmos_t: 'Team Atmosphere', rule_atmos_d: 'Respect management, teammates, and activity arrangements. Maintain the team environment through cooperation and discipline.',
+      join_basic_t: 'Basic Conditions', join_basic_d: 'Own a legitimate copy of ETS2 and have normal access to TruckersMP.',
+      join_time_t: 'Time Requirements', join_time_d: 'Have sufficient online time to participate in daily activities, convoys, and related collective actions.',
+      join_device_t: 'Equipment Requirements', join_device_d: 'Have basic voice equipment and be able to use YY channel 819095 for voice communication and coordination.',
+      join_attitude_t: 'Attitude Requirements', join_attitude_d: 'Have team spirit, obey management, and maintain a stable, positive, and serious attitude.',
+      join_image_t: 'Image Requirements', join_image_d: 'Willing to maintain the team\'s public image, comply with team rules, and avoid any behavior that damages the team\'s reputation.',
+      join_way_t: 'How to Join', join_way_d: 'Submit an application via the recruitment group 825532223 / YY channel 819095. Join after approval.',
+      gallery_title: 'Team Gallery',
+      gallery_sub: 'TEAM GALLERY',
+      gallery_item1: 'Team Activity 1', gallery_item2: 'Team Activity 2', gallery_item3: 'Team Activity 3',
+      gallery_item4: 'Team Activity 4', gallery_item5: 'Team Activity 5', gallery_item6: 'Team Activity 6',
+      staff_title: 'Team Staff',
+      staff_sub: 'TEAM STAFF',
+      staff_1_name: 'PoXiao', staff_1_role: 'Founder',
+      staff_2_name: 'WanQing', staff_2_role: 'Co-Founder',
+      staff_3_name: 'HaiTang', staff_3_role: 'Co-Founder',
+      staff_4_name: 'MaoLv', staff_4_role: 'Admin Manager',
+      staff_5_name: 'QianYi', staff_5_role: 'Vice Captain',
+      staff_6_name: 'BeiMu', staff_6_role: 'Vice Captain',
+      staff_7_name: 'MingRi', staff_7_role: 'Vice Captain & Event Manager',
+      staff_8_name: 'XiaoQi', staff_8_role: 'Team Executive',
+      staff_9_name: 'XingXing', staff_9_role: 'HR Manager',
+      staff_10_name: 'YuYu', staff_10_role: 'Convoy Manager',
+      contact_title: 'Contact Us',
+      contact_sub: 'CONTACT US',
+      contact_qq_title: 'QQ Group',
+      contact_qq_desc: 'ETS2 [China GongChi Team] Official TMP Reception Group',
+      contact_qq_label: 'Group No.',
+      contact_qq_btn: 'Join QQ Group',
+      contact_yy_title: 'YY Voice Channel',
+      contact_yy_desc: 'Voice communication during activities · Convoy dispatch',
+      contact_yy_label: 'Channel No.',
+      contact_yy_btn: 'Join YY Channel',
+      contact_vtc_title: 'TruckersMP VTC',
+      contact_vtc_desc: 'View team profile, member list, and details',
+      contact_vtc_members: 'Members',
+      contact_vtc_btn: 'Visit VTC Page',
+      footer_compliance: 'The team complies with <a onclick="openPolicyModal(\'gdpr\')">GDPR</a> regulations and abides by the <a onclick="openPolicyModal(\'tos\')">Terms of Service</a> and <a onclick="openPolicyModal(\'privacy\')">Privacy Policy</a>.',
+      footer_copy: '© 2026 China GC Team · All final interpretation rights belong to GC Team',
+      policy_gdpr_title: 'GDPR Compliance Statement',
+      policy_gdpr_meta: 'General Data Protection Regulation · Last updated: January 2026',
+      policy_tos_title: 'Terms of Service',
+      policy_tos_meta: 'Terms of Service · Last updated: January 2026',
+      policy_privacy_title: 'Privacy Policy',
+      policy_privacy_meta: 'Privacy Policy · Last updated: January 2026'
+    }
+  };
+
+  let currentLang = 'zh';
+
+  function setLanguage(lang) {
+    if (!I18N[lang]) return;
+    currentLang = lang;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (I18N[lang][key] !== undefined) {
+        el.textContent = I18N[lang][key];
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (I18N[lang][key] !== undefined) {
+        el.innerHTML = I18N[lang][key];
+      }
+    });
+
+    document.getElementById('btnZh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    document.title = lang === 'zh' ? '中国共驰车队 | China GC Team' : 'China GC Team | 中国共驰车队';
+
+    const vtcMemberInline = document.getElementById('vtcMemberInline');
+    if (vtcMemberInline) {
+      vtcMemberInline.textContent = lang === 'zh'
+        ? TEAM_DATA.vtcMembers + ' 人'
+        : TEAM_DATA.vtcMembers + ' members';
+    }
+  }
+
+  /* ========== 数据 ========== */
   const TEAM_DATA = {
     vtcMembers: 100,
     qqGroupNumber: "825532223",
-    vtcId: "86009"
+    vtcId: "86009",
+    yyChannel: "819095"
   };
 
-  // 官方 API 直连地址
-  // 注意：浏览器直接请求会遇到 CORS 限制，请求失败时自动回退到保底值 100
-  // 后续找到可用的代理接口后，替换此地址即可
   const API_URL = 'https://api.truckersmp.com/v2/vtc/86009';
 
+  /* ========== 政策内容 ========== */
+  function getPolicyData(type) {
+    const lang = currentLang;
+    if (type === 'gdpr') {
+      return {
+        title: I18N[lang].policy_gdpr_title,
+        meta: I18N[lang].policy_gdpr_meta,
+        body: lang === 'zh' ? `
+          <h3>1. 我们的承诺</h3>
+          <p>中国共驰车队（China GC Team，以下简称"本车队"）尊重并保护所有访客与成员的欧盟《通用数据保护条例》（GDPR）权利。我们致力于透明、合法地处理个人数据。</p>
+          <h3>2. 数据控制者</h3>
+          <p>本网站及车队相关服务的数据控制者为 China GC Team。如需行使 GDPR 权利，请通过 QQ 接待群（${TEAM_DATA.qqGroupNumber}）或 TruckersMP VTC 平台联系我们。</p>
+          <h3>3. 我们收集的数据</h3>
+          <ul>
+            <li>您主动提供的游戏昵称、QQ 号码、TruckersMP ID 等注册/加入车队所需信息。</li>
+            <li>您在使用网站过程中产生的必要技术日志（如访问时间、页面浏览记录），仅用于安全与性能分析。</li>
+            <li>我们不主动收集任何敏感个人数据，也不对访客进行画像或自动化决策。</li>
+          </ul>
+          <h3>4. 数据处理的法律依据</h3>
+          <ul>
+            <li>履行车队成员管理合同或加入申请流程所必需。</li>
+            <li>基于您的同意（如加入 QQ 群、参与活动）。</li>
+            <li>基于合法利益（如维护网站安全、防止滥用）。</li>
+          </ul>
+          <h3>5. 数据保留与共享</h3>
+          <p>我们仅在实现上述目的所必需的期限内保留您的数据。除法律要求或为提供车队服务所必需（如 TruckersMP 平台）外，我们不会向第三方出售或共享您的个人数据。</p>
+          <h3>6. 您的 GDPR 权利</h3>
+          <ul>
+            <li><strong>访问权</strong>：您有权要求获取我们持有的关于您的个人数据副本。</li>
+            <li><strong>更正权</strong>：您有权要求更正不准确或不完整的数据。</li>
+            <li><strong>删除权（被遗忘权）</strong>：在法定条件下，您有权要求删除您的个人数据。</li>
+            <li><strong>限制处理权</strong>：您有权要求限制对您数据的处理。</li>
+            <li><strong>数据可携带权</strong>：您有权以结构化、通用格式获取您的数据。</li>
+            <li><strong>反对权</strong>：您有权反对基于合法利益的处理。</li>
+          </ul>
+          <h3>7. 行使权利</h3>
+          <p>如需行使上述任何权利，请通过本页面底部的联系方式与我们取得联系。我们将在 30 天内回复您的请求。</p>
+          <h3>8. 数据安全</h3>
+          <p>我们采取合理的技术与管理措施保护您的个人数据免遭未经授权的访问、泄露或滥用。</p>
+          <div class="policy-footer-note">本声明为 China GC Team 对 GDPR 的合规承诺，最终解释权归本车队所有。</div>
+        ` : `
+          <h3>1. Our Commitment</h3>
+          <p>China GongChi Team ("the Team") respects and protects the EU General Data Protection Regulation (GDPR) rights of all visitors and members. We are committed to transparent and lawful processing of personal data.</p>
+          <h3>2. Data Controller</h3>
+          <p>The data controller for this website and related team services is China GC Team. To exercise GDPR rights, please contact us via the QQ group (${TEAM_DATA.qqGroupNumber}) or the TruckersMP VTC platform.</p>
+          <h3>3. Data We Collect</h3>
+          <ul>
+            <li>Information you voluntarily provide, such as game nickname, QQ number, and TruckersMP ID, required for registration/joining the team.</li>
+            <li>Necessary technical logs generated during website use (e.g., access time, page views), used solely for security and performance analysis.</li>
+            <li>We do not actively collect sensitive personal data, nor do we profile visitors or make automated decisions.</li>
+          </ul>
+          <h3>4. Legal Basis for Processing</h3>
+          <ul>
+            <li>Necessary for performing the team membership management contract or join application process.</li>
+            <li>Based on your consent (e.g., joining QQ groups, participating in activities).</li>
+            <li>Based on legitimate interests (e.g., maintaining website security, preventing abuse).</li>
+          </ul>
+          <h3>5. Data Retention & Sharing</h3>
+          <p>We retain your data only for as long as necessary for the purposes above. We do not sell or share your personal data with third parties except as required by law or to provide team services (e.g., TruckersMP platform).</p>
+          <h3>6. Your GDPR Rights</h3>
+          <ul>
+            <li><strong>Right of Access</strong>: You have the right to request a copy of your personal data held by us.</li>
+            <li><strong>Right to Rectification</strong>: You have the right to request correction of inaccurate or incomplete data.</li>
+            <li><strong>Right to Erasure (Right to be Forgotten)</strong>: Under legal conditions, you have the right to request deletion of your personal data.</li>
+            <li><strong>Right to Restrict Processing</strong>: You have the right to request restriction of processing of your data.</li>
+            <li><strong>Right to Data Portability</strong>: You have the right to receive your data in a structured, commonly used format.</li>
+            <li><strong>Right to Object</strong>: You have the right to object to processing based on legitimate interests.</li>
+          </ul>
+          <h3>7. Exercising Your Rights</h3>
+          <p>To exercise any of the above rights, please contact us via the contact information at the bottom of this page. We will respond to your request within 30 days.</p>
+          <h3>8. Data Security</h3>
+          <p>We take reasonable technical and organizational measures to protect your personal data from unauthorized access, disclosure, or misuse.</p>
+          <div class="policy-footer-note">This statement is China GC Team's GDPR compliance commitment. All final interpretation rights belong to the Team.</div>
+        `
+      };
+    }
+    if (type === 'tos') {
+      return {
+        title: I18N[lang].policy_tos_title,
+        meta: I18N[lang].policy_tos_meta,
+        body: lang === 'zh' ? `
+          <h3>1. 接受条款</h3>
+          <p>访问或使用中国共驰车队（China GC Team）网站及相关服务，即表示您已阅读、理解并同意受本服务条款的约束。如果您不同意本条款，请停止使用本网站及车队服务。</p>
+          <h3>2. 服务描述</h3>
+          <p>本网站为中国共驰车队的信息展示与成员招募平台，提供车队介绍、规则说明、活动展示、联系方式等服务。车队基于 TruckersMP 平台运营《欧洲卡车模拟2》虚拟运输活动。</p>
+          <h3>3. 用户行为规范</h3>
+          <ul>
+            <li>您同意遵守 TruckersMP 平台规则、游戏发行商条款以及本车队公布的各项规则。</li>
+            <li>您不得利用本网站从事任何违法、侵权、骚扰、欺诈或破坏网络安全的行为。</li>
+            <li>您不得冒用车队管理身份或发布虚假信息损害车队声誉。</li>
+            <li>车队有权对违反规则的用户采取警告、限制或取消成员资格等措施。</li>
+          </ul>
+          <h3>4. 知识产权</h3>
+          <p>本网站使用的 Logo、文字、图片（除特别注明外）等知识产权归 China GC Team 或相应权利人所有。未经书面许可，不得擅自复制、传播或用于商业用途。</p>
+          <h3>5. 第三方链接</h3>
+          <p>本网站可能包含指向第三方平台（如 QQ、TruckersMP、YY）的链接。我们不对第三方网站的内容、隐私实践或服务条款负责，请您自行查阅相关条款。</p>
+          <h3>6. 免责声明</h3>
+          <p>本网站及车队服务按"现状"提供。我们尽力确保信息准确，但不对因使用本网站导致的任何直接或间接损失承担责任。车队活动参与存在固有风险，请成员自行评估。</p>
+          <h3>7. 条款变更</h3>
+          <p>我们保留随时修改本服务条款的权利。修改后的条款将在本页面发布，继续使用即视为接受更新后的条款。</p>
+          <h3>8. 适用法律</h3>
+          <p>本条款的解释与适用遵循车队运营地相关法律法规，不违反中华人民共和国法律及 GDPR 等适用的数据保护法规。</p>
+          <div class="policy-footer-note">China GC Team 保留对本服务条款的最终解释权。</div>
+        ` : `
+          <h3>1. Acceptance of Terms</h3>
+          <p>By accessing or using the China GongChi Team website and related services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree, please stop using this website and team services.</p>
+          <h3>2. Service Description</h3>
+          <p>This website is an information display and member recruitment platform for China GongChi Team, providing team introduction, rules, activity showcase, and contact information. The team operates Euro Truck Simulator 2 virtual transport activities on the TruckersMP platform.</p>
+          <h3>3. User Conduct</h3>
+          <ul>
+            <li>You agree to comply with TruckersMP platform rules, game publisher terms, and all team rules.</li>
+            <li>You may not use this website for any illegal, infringing, harassing, fraudulent, or network-disrupting activities.</li>
+            <li>You may not impersonate team management or post false information to damage the team's reputation.</li>
+            <li>The team reserves the right to warn, restrict, or revoke membership of users who violate the rules.</li>
+          </ul>
+          <h3>4. Intellectual Property</h3>
+          <p>Intellectual property such as the logo, text, and images (unless otherwise noted) used on this website belongs to China GC Team or respective rights holders. Unauthorized reproduction, distribution, or commercial use is prohibited.</p>
+          <h3>5. Third-Party Links</h3>
+          <p>This website may contain links to third-party platforms (e.g., QQ, TruckersMP, YY). We are not responsible for the content, privacy practices, or terms of service of third-party websites. Please review their terms yourself.</p>
+          <h3>6. Disclaimer</h3>
+          <p>This website and team services are provided "as is." While we strive for accuracy, we are not liable for any direct or indirect losses resulting from the use of this website. Participation in team activities carries inherent risks; members should assess them independently.</p>
+          <h3>7. Changes to Terms</h3>
+          <p>We reserve the right to modify these Terms of Service at any time. Updated terms will be posted on this page. Continued use constitutes acceptance of the updated terms.</p>
+          <h3>8. Governing Law</h3>
+          <p>These terms shall be interpreted and applied in accordance with the laws of the team's operating location, without violating the laws of the People's Republic of China and applicable data protection regulations such as GDPR.</p>
+          <div class="policy-footer-note">China GC Team reserves the right of final interpretation of these Terms of Service.</div>
+        `
+      };
+    }
+    if (type === 'privacy') {
+      return {
+        title: I18N[lang].policy_privacy_title,
+        meta: I18N[lang].policy_privacy_meta,
+        body: lang === 'zh' ? `
+          <h3>1. 信息收集</h3>
+          <p>我们仅在您主动提供时收集个人信息，例如：</p>
+          <ul>
+            <li>加入车队时提交的 QQ 号、游戏昵称、TruckersMP ID。</li>
+            <li>通过 QQ 群或 YY 语音沟通时产生的必要联系信息。</li>
+            <li>您通过网站表单或邮件主动发送的信息。</li>
+          </ul>
+          <p>本网站不主动使用 Cookies 或类似跟踪技术收集个人身份信息，仅使用必要的本地存储实现基础功能。</p>
+          <h3>2. 信息使用</h3>
+          <ul>
+            <li>审核加入申请、管理车队成员档案。</li>
+            <li>组织联运活动、发送活动通知。</li>
+            <li>维护车队秩序与安全，处理违规行为。</li>
+            <li>改进网站体验与车队服务质量。</li>
+          </ul>
+          <h3>3. 信息共享</h3>
+          <p>我们不会出售您的个人信息。仅在以下情况下可能共享：</p>
+          <ul>
+            <li>获得您的明确同意。</li>
+            <li>为完成 TruckersMP VTC 注册或活动报名所必需。</li>
+            <li>法律法规要求或政府机关依法调取。</li>
+          </ul>
+          <h3>4. 数据安全</h3>
+          <p>我们采取合理措施保护您的个人信息，包括但不限于限制访问权限、使用安全通信渠道。但请注意，互联网传输无法保证绝对安全。</p>
+          <h3>5. 数据保留</h3>
+          <p>您的个人信息将在您为车队成员期间及之后合理期限内保留，或按法律要求保留。不再需要时，我们将安全删除或匿名化处理。</p>
+          <h3>6. 您的权利</h3>
+          <ul>
+            <li>查询、更正或删除您的个人信息。</li>
+            <li>撤回同意（不影响撤回前处理的合法性）。</li>
+            <li>反对或限制某些数据处理。</li>
+            <li>获取您的数据副本（数据可携带权）。</li>
+          </ul>
+          <p>如需行使权利，请通过 QQ 接待群 ${TEAM_DATA.qqGroupNumber} 或 YY 频道 ${TEAM_DATA.yyChannel} 联系我们。</p>
+          <h3>7. 儿童隐私</h3>
+          <p>本车队服务面向符合游戏年龄要求的用户。我们不会有意收集未满法定年龄儿童的个人信息。</p>
+          <h3>8. 政策更新</h3>
+          <p>本隐私政策可能不时更新。更新版本将在本页面发布，重大变更会通过车队渠道通知。</p>
+          <div class="policy-footer-note">China GC Team 致力于保护您的隐私，如有疑问请随时联系我们。</div>
+        ` : `
+          <h3>1. Information Collection</h3>
+          <p>We collect personal information only when you voluntarily provide it, such as:</p>
+          <ul>
+            <li>QQ number, game nickname, and TruckersMP ID submitted when joining the team.</li>
+            <li>Necessary contact information generated through QQ groups or YY voice communication.</li>
+            <li>Information you voluntarily send via website forms or email.</li>
+          </ul>
+          <p>This website does not actively use cookies or similar tracking technologies to collect personally identifiable information. Only necessary local storage is used for basic functionality.</p>
+          <h3>2. How We Use Information</h3>
+          <ul>
+            <li>Reviewing join applications and managing team member records.</li>
+            <li>Organizing convoys and sending activity notifications.</li>
+            <li>Maintaining team order and security, handling violations.</li>
+            <li>Improving website experience and team service quality.</li>
+          </ul>
+          <h3>3. Information Sharing</h3>
+          <p>We do not sell your personal information. We may share it only in the following cases:</p>
+          <ul>
+            <li>With your explicit consent.</li>
+            <li>As necessary to complete TruckersMP VTC registration or event registration.</li>
+            <li>As required by law or requested by government authorities.</li>
+          </ul>
+          <h3>4. Data Security</h3>
+          <p>We take reasonable measures to protect your personal information, including but not limited to restricting access and using secure communication channels. However, please note that internet transmission cannot be guaranteed to be absolutely secure.</p>
+          <h3>5. Data Retention</h3>
+          <p>Your personal information will be retained during your team membership and for a reasonable period thereafter, or as required by law. When no longer needed, we will securely delete or anonymize it.</p>
+          <h3>6. Your Rights</h3>
+          <ul>
+            <li>Access, correct, or delete your personal information.</li>
+            <li>Withdraw consent (without affecting the lawfulness of processing before withdrawal).</li>
+            <li>Object to or restrict certain data processing.</li>
+            <li>Obtain a copy of your data (right to data portability).</li>
+          </ul>
+          <p>To exercise your rights, please contact us via QQ group ${TEAM_DATA.qqGroupNumber} or YY channel ${TEAM_DATA.yyChannel}.</p>
+          <h3>7. Children's Privacy</h3>
+          <p>Our team services are intended for users who meet the game's age requirements. We do not knowingly collect personal information from children under the legal age.</p>
+          <h3>8. Policy Updates</h3>
+          <p>This Privacy Policy may be updated from time to time. Updated versions will be posted on this page, and significant changes will be notified through team channels.</p>
+          <div class="policy-footer-note">China GC Team is committed to protecting your privacy. Please contact us if you have any questions.</div>
+        `
+      };
+    }
+    return null;
+  }
+
+  function openPolicyModal(type) {
+    const data = getPolicyData(type);
+    if (!data) return;
+
+    document.getElementById('policyModalBody').innerHTML = `
+      <h2>${data.title}</h2>
+      <div class="policy-meta">${data.meta}</div>
+      ${data.body}
+    `;
+
+    document.getElementById('policyModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('policyModalContent').scrollTop = 0;
+  }
+
+  function closePolicyModal() {
+    document.getElementById('policyModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('policyModal').addEventListener('click', function(e) {
+    if (e.target === this) closePolicyModal();
+  });
+
+  /* ========== 原有功能 ========== */
   function createParticles() {
     const box = document.getElementById('particles');
     if (!box) return;
@@ -1327,36 +2073,22 @@
     if (slideTimer) clearInterval(slideTimer);
   }
 
-  /* =====================================================
-     获取 VTC 成员数
-     - 优先请求官方 API
-     - 失败时使用保底值 100
-     - 后续找到可用代理接口后，只替换 API_URL 即可
-     ===================================================== */
   async function fetchVTCData() {
     try {
       const res = await fetch(API_URL);
-
-      if (!res.ok) {
-        throw new Error(`API 返回 HTTP ${res.status}`);
-      }
-
+      if (!res.ok) throw new Error(`API 返回 HTTP ${res.status}`);
       const data = await res.json();
 
-      // 官方 API 响应结构：{ error: false, response: { members_count: 102, ... } }
       if (data && data.response && typeof data.response.members_count === 'number') {
         TEAM_DATA.vtcMembers = data.response.members_count;
         console.log('[VTC] 成员数已更新：', TEAM_DATA.vtcMembers);
         return;
       }
-
-      // 兼容代理接口可能返回的结构：{ success: true, memberCount: 102 }
       if (data && data.success && typeof data.memberCount === 'number') {
         TEAM_DATA.vtcMembers = data.memberCount;
         console.log('[VTC] 成员数已更新（代理）：', TEAM_DATA.vtcMembers);
         return;
       }
-
       throw new Error('响应格式不符合预期');
     } catch (err) {
       console.warn('[VTC] 数据获取失败，使用保底值 100：', err.message);
@@ -1372,7 +2104,11 @@
     const vtcMemberInline = document.getElementById('vtcMemberInline');
     if (qqGroupNum) qqGroupNum.textContent = TEAM_DATA.qqGroupNumber;
     if (vtcIdNum) vtcIdNum.textContent = TEAM_DATA.vtcId;
-    if (vtcMemberInline) vtcMemberInline.textContent = TEAM_DATA.vtcMembers + ' 人';
+    if (vtcMemberInline) {
+      vtcMemberInline.textContent = currentLang === 'zh' 
+        ? TEAM_DATA.vtcMembers + ' 人' 
+        : TEAM_DATA.vtcMembers + ' members';
+    }
 
     animateTo('vtcMemberCount', TEAM_DATA.vtcMembers);
   }
@@ -1431,10 +2167,8 @@
     document.getElementById('home').classList.add('visible');
     document.getElementById('contact').classList.add('visible');
     initCarousel();
-
     fillTeamData();
 
-    // 兜底：3 秒后若仍未成功填充真实值，再次尝试
     setTimeout(() => {
       if (TEAM_DATA.vtcMembers === 100) {
         fillTeamData();
@@ -1443,7 +2177,10 @@
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'Escape') {
+      closeLightbox();
+      closePolicyModal();
+    }
   });
 </script>
 
